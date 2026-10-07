@@ -23,17 +23,15 @@
         var target = document.getElementById(link.getAttribute("href").slice(1));
         if (!target || !["workflow", "features", "contact"].includes(target.id)) return;
 
-        var heading = target.matches("section") ? target.querySelector("h2") : target;
-        if (!heading) return;
-
         event.preventDefault();
         var hash = "#" + target.id;
         if (window.location.hash !== hash) {
           window.history.pushState(null, "", hash);
         }
-        heading.scrollIntoView({
+        var block = target.getBoundingClientRect().height <= window.innerHeight ? "center" : "start";
+        target.scrollIntoView({
           behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-          block: "center"
+          block: block
         });
         var menu = link.closest("details");
         if (menu) menu.open = false;
@@ -386,10 +384,10 @@
       </div>
     </section>
 
-    <section class="section capabilities">
+    <section class="section capabilities" id="features">
       <div class="wrap">
         <div class="section-heading">
-          <h2 id="features">Made for the work behind the accounts.</h2>
+          <h2>Made for the work behind the accounts.</h2>
           <p class="section-intro">A practical set of tools for committees and office-bearers managing recurring charges for flats and shops.</p>
         </div>
         <div class="capability-list">
