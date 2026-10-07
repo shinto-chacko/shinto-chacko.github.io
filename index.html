@@ -16,6 +16,28 @@
         window.history.replaceState(null, "", window.location.pathname + window.location.search);
         window.scrollTo(0, 0);
       }
+      document.addEventListener("click", function (event) {
+        var link = event.target.closest && event.target.closest('a[href^="#"]');
+        if (!link) return;
+
+        var target = document.getElementById(link.getAttribute("href").slice(1));
+        if (!target || !["workflow", "features", "contact"].includes(target.id)) return;
+
+        var heading = target.matches("section") ? target.querySelector("h2") : target;
+        if (!heading) return;
+
+        event.preventDefault();
+        var hash = "#" + target.id;
+        if (window.location.hash !== hash) {
+          window.history.pushState(null, "", hash);
+        }
+        heading.scrollIntoView({
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+          block: "center"
+        });
+        var menu = link.closest("details");
+        if (menu) menu.open = false;
+      });
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,7 +168,6 @@
     .section { padding: clamp(4.5rem, 8vw, 7rem) 0; }
     .section-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(250px, .6fr); align-items: end; gap: 3rem; margin-bottom: 3.2rem; }
     h2 { max-width: 15ch; margin-bottom: 0; font-size: clamp(2.35rem, 4.5vw, 4rem); line-height: 1.08; letter-spacing: -.065em; }
-    #features { scroll-margin-top: 3.75rem; }
     .section-intro { max-width: 46ch; margin: 0; color: var(--muted); font-size: 1rem; }
 
     .workflow { background: var(--green-deep); color: white; }
