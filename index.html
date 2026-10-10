@@ -240,20 +240,13 @@
     .billing-caveat { margin: .4rem 0 0; color: #bab8c2; font-size: .72rem; }
 
     .contact { position: relative; overflow: hidden; padding: clamp(4.5rem, 9vw, 7rem) 0; background: linear-gradient(117deg, #087c70, #087f91 53%, #347ebd); color: white; }
-    .contact-inner { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(245px, .44fr); align-items: end; gap: 3rem; }
+    .contact-inner { position: relative; z-index: 1; }
     .contact h2 { max-width: 12ch; font-size: clamp(2.6rem, 5.5vw, 4.7rem); }
     .contact p { max-width: 54ch; margin: 1.1rem 0 0; color: #e3fbf6; }
-    .contact-action { display: flex; flex-direction: column; gap: .45rem; justify-self: end; padding: 1.15rem 1.35rem; border: 1px solid rgba(255, 255, 255, .45); border-radius: 17px; background: rgba(5, 59, 66, .2); color: white; font-weight: 750; text-decoration: none; transition: transform .18s ease, background-color .18s ease; }
-    .contact-action:hover { transform: translateY(-3px); background: rgba(5, 59, 66, .32); }
-    .contact-action small { color: #dcf4ee; font-size: .7rem; font-weight: 450; }
     .site-footer { padding: 1.35rem 0; background: #17232b; color: #d3e0e2; }
-    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: .76rem; }
+    .footer-row { font-size: .76rem; }
     .footer-row p { margin: 0; }
     .footer-brand { color: white; font-weight: 800; }
-    .footer-meta { display: flex; gap: 1.15rem; align-items: center; }
-    .footer-meta a { color: #e0cf76; text-decoration: none; }
-    .footer-domain { color: #c8d3d5; }
-    .footer-meta a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
     @media (max-width: 940px) {
       .hero-grid { grid-template-columns: minmax(0, .92fr) minmax(360px, 1.08fr); gap: 2rem; }
@@ -297,9 +290,6 @@
       .why-band { grid-template-columns: 1fr; gap: 1rem; }
       .billing-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .billing h2 { max-width: 14ch; }
-      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
-      .contact-action { justify-self: start; }
-      .footer-row { align-items: flex-start; flex-direction: column; }
     }
     @media (max-width: 390px) {
       .wrap { width: calc(100% - 28px); }
@@ -311,7 +301,6 @@
       .admin-actions { grid-template-columns: 1fr; }
       .role-admin h3 { max-width: 12ch; }
       .multi-flat { grid-template-columns: 1fr; }
-      .footer-meta { flex-wrap: wrap; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -518,10 +507,6 @@
           <h2>See how DoorNotice could work for your society.</h2>
           <p>DoorNotice is in pilot. Request a live walkthrough of the committee, security and resident workflows, with DoorDues billing as an optional add-on.</p>
         </div>
-        <a class="contact-action" href="mailto:shinto.chacko@icloud.com?subject=DoorNotice%20pilot%20demo">
-          Request a society demo
-          <small>shinto.chacko@icloud.com</small>
-        </a>
       </div>
     </section>
   </main>
@@ -529,7 +514,6 @@
   <footer class="site-footer">
     <div class="wrap footer-row">
       <p><span class="footer-brand">DoorNotice</span> · A society app by Digital Minds</p>
-      <div class="footer-meta"><span class="footer-domain">www.doornotice.com</span><a href="doordues.html">DoorDues</a></div>
     </div>
   </footer>
 
