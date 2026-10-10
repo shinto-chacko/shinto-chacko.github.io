@@ -632,7 +632,7 @@
         var visibleHeight = window.innerHeight - headerHeight;
         var rect = target.getBoundingClientRect();
         var targetTop = rect.top + window.scrollY;
-        if (target.id === "contact" || rect.height > visibleHeight) targetTop -= headerHeight;
+        if (target.id === "roles" || target.id === "contact" || rect.height > visibleHeight) targetTop -= headerHeight;
         else targetTop -= headerHeight + (visibleHeight - rect.height) / 2;
         window.scrollTo({
           top: targetTop,
