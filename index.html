@@ -573,6 +573,11 @@
         roleDeck.querySelector("[data-slide-next]").addEventListener("click", function () {
           showRoleSlide(currentRoleSlide + 1);
         });
+        document.querySelectorAll('a[href="#roles"]').forEach(function (link) {
+          link.addEventListener("click", function () {
+            showRoleSlide(roleSlides.length - 1);
+          });
+        });
         roleDeck.addEventListener("keydown", function (event) {
           if (event.altKey || event.ctrlKey || event.metaKey) return;
           if (event.key === "ArrowLeft") showRoleSlide(currentRoleSlide - 1);
