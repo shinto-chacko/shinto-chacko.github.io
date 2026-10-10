@@ -470,7 +470,7 @@
             <button type="button" data-slide-previous aria-label="Previous slide">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14.5 5-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <span class="role-slide-status" data-slide-status aria-live="polite" aria-atomic="true">01 / 03 · Committee</span>
+            <span class="role-slide-status" data-slide-status aria-live="polite" aria-atomic="true">03 / 03 · Owners and residents</span>
             <button type="button" data-slide-next aria-label="Next slide">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9.5 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
@@ -560,7 +560,7 @@
       if (roleDeck) {
         var roleSlides = Array.prototype.slice.call(roleDeck.querySelectorAll(".role-slide"));
         var roleStatus = roleDeck.querySelector("[data-slide-status]");
-        var currentRoleSlide = 0;
+        var currentRoleSlide = roleSlides.length - 1;
         function showRoleSlide(index) {
           currentRoleSlide = (index + roleSlides.length) % roleSlides.length;
           roleSlides.forEach(function (slide, slideIndex) {
@@ -584,7 +584,7 @@
           else return;
           event.preventDefault();
         });
-        showRoleSlide(0);
+        showRoleSlide(currentRoleSlide);
       }
 
       var sectionIds = ["product", "roles", "billing", "contact"];
