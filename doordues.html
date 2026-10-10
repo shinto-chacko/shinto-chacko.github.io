@@ -297,24 +297,13 @@
       color: white;
     }
     .contact::after { content: "DD"; position: absolute; right: max(-2rem, calc((100vw - 1180px) / 2)); bottom: -5.1rem; color: rgba(0, 82, 56, .17); font-size: clamp(13rem, 32vw, 27rem); font-weight: 800; line-height: 1; letter-spacing: -.12em; pointer-events: none; }
-    .contact-inner { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, .48fr); align-items: end; gap: 3rem; }
+    .contact-inner { position: relative; z-index: 1; }
     .contact h2 { max-width: 12ch; font-size: clamp(2.8rem, 5.5vw, 5rem); }
     .contact p { max-width: 54ch; margin: 1.1rem 0 0; color: #e4fff0; }
-    .contact-action {
-      display: inline-flex; flex-direction: column; align-items: flex-start; gap: .55rem; justify-self: end;
-      padding: 1.1rem 1.3rem; border: 1px solid rgba(255, 255, 255, .24); border-radius: 16px;
-      background: rgba(255, 255, 255, .09); color: white; font-size: 1rem; font-weight: 700;
-      text-decoration-thickness: 1px; text-underline-offset: 6px;
-      transition: transform .2s ease, background-color .2s ease, border-color .2s ease;
-    }
-    .contact-action:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, .5); background: rgba(255, 255, 255, .15); }
-    .contact-action small { color: #d5f7e3; font-family: var(--mono); font-size: .66rem; font-weight: 400; }
-    .contact-action:hover { color: #e4fff0; }
     .site-footer { padding: 1.35rem 0; background: linear-gradient(110deg, #173908, var(--green-deep)); color: #d4e8dd; }
-    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: .76rem; }
+    .footer-row { font-size: .76rem; }
     .footer-row p { margin: 0; }
     .footer-brand { color: white; font-weight: 800; }
-    .footer-note { font-family: var(--mono); font-size: .62rem; }
 
     @media (max-width: 900px) {
       .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(340px, .95fr); gap: 2.2rem; }
@@ -361,9 +350,6 @@
       .workflow-step { min-height: 190px; }
       .capability-row { grid-template-columns: 1fr; gap: .55rem; padding: 1.15rem; }
       .local-note { grid-template-columns: 1fr; gap: 1.2rem; padding: 1.4rem; }
-      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
-      .contact-action { justify-self: start; }
-      .footer-row { align-items: flex-start; flex-direction: column; gap: .45rem; }
     }
     @media (max-width: 390px) {
       .wrap { width: calc(100% - 28px); }
@@ -551,10 +537,6 @@
           <h2>Bring your society’s billing into focus.</h2>
           <p>For questions about DoorDues, contact Digital Minds. We’ll help you understand whether the workspace fits your society’s process.</p>
         </div>
-        <a class="contact-action" href="mailto:shinto.chacko@icloud.com?subject=DoorDues%20demo%20request">
-          Email us for a demo
-          <small>shinto.chacko@icloud.com</small>
-        </a>
       </div>
     </section>
   </main>
@@ -562,7 +544,6 @@
   <footer class="site-footer">
     <div class="wrap footer-row">
       <p><span class="footer-brand">DoorDues</span> · Developed by Digital Minds</p>
-      <p class="footer-note">Society billing workspace</p>
     </div>
   </footer>
 </body>
