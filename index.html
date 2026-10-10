@@ -234,9 +234,13 @@
     .contact h2 { max-width: 12ch; font-size: clamp(2.6rem, 5.5vw, 4.7rem); }
     .contact p { max-width: 54ch; margin: 1.1rem 0 0; color: #e3fbf6; }
     .site-footer { padding: 1.35rem 0; background: #17232b; color: #d3e0e2; }
-    .footer-row { font-size: .76rem; }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: .76rem; }
     .footer-row p { margin: 0; }
     .footer-brand { color: white; font-weight: 800; }
+    .footer-email { margin-left: auto; color: inherit; overflow-wrap: anywhere; text-underline-offset: .2em; }
+    [hidden] { display: none !important; }
+    .doordues-view { position: fixed; z-index: 1000; inset: 0; background: var(--paper); }
+    .doordues-view iframe { display: block; width: 100%; height: 100%; border: 0; }
 
     @media (max-width: 940px) {
       .hero-grid { grid-template-columns: minmax(0, .92fr) minmax(360px, 1.08fr); gap: 2rem; }
@@ -315,7 +319,7 @@
         <a href="#roles">For your society</a>
         <a href="#billing">DoorDues</a>
         <a href="#contact">Contact</a>
-        <a class="nav-cta" href="mailto:shinto.chacko@icloud.com?subject=DoorNotice%20pilot%20demo">Request a demo</a>
+        <a class="nav-cta" href="mailto:contact@doornotice.com?subject=DoorNotice%20pilot%20demo">Request a demo</a>
       </nav>
       <details class="mobile-menu">
         <summary>Menu</summary>
@@ -324,13 +328,13 @@
           <a href="#roles">For your society</a>
           <a href="#billing">DoorDues add-on</a>
           <a href="#contact">Contact</a>
-          <a class="nav-cta" href="mailto:shinto.chacko@icloud.com?subject=DoorNotice%20pilot%20demo">Request a demo</a>
+          <a class="nav-cta" href="mailto:contact@doornotice.com?subject=DoorNotice%20pilot%20demo">Request a demo</a>
         </nav>
       </details>
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" tabindex="-1">
     <section class="hero" id="top">
       <div class="wrap hero-grid">
         <div class="hero-copy">
@@ -338,7 +342,7 @@
           <h1>Society life, in better sync.</h1>
           <p class="hero-lede">One practical app for the people who run, secure and live in your society. Share notices, manage visitor approvals, keep daily-help records, view bills and follow up on incidents in one place.</p>
           <div class="hero-actions">
-            <a class="button-primary" href="mailto:shinto.chacko@icloud.com?subject=DoorNotice%20pilot%20demo">
+            <a class="button-primary" href="mailto:contact@doornotice.com?subject=DoorNotice%20pilot%20demo">
               Request a live demo
             </a>
             <a class="button-secondary" href="#roles">Explore the app</a>
@@ -524,15 +528,22 @@
   <footer class="site-footer">
     <div class="wrap footer-row">
       <p><span class="footer-brand">DoorNotice</span> · A society app by Digital Minds</p>
+      <a class="footer-email" href="mailto:contact@doornotice.com">contact@doornotice.com</a>
     </div>
   </footer>
+
+  <div class="doordues-view" id="doordues-view" hidden>
+    <iframe title="DoorDues billing workspace" src="about:blank"></iframe>
+  </div>
 
   <script>
     (function () {
       if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
-      var navigation = window.performance.getEntriesByType && window.performance.getEntriesByType("navigation");
-      if (navigation && navigation[0] && navigation[0].type === "reload" && window.location.hash) {
-        window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      var openDoorDuesOnLoad = window.location.search === "?view=doordues";
+      var cleanPath = window.location.pathname === "/index.html" ? "/" : window.location.pathname;
+      if (window.location.hash || cleanPath !== window.location.pathname || openDoorDuesOnLoad) {
+        var pageState = openDoorDuesOnLoad ? { doornoticeView: "doordues" } : window.history.state;
+        window.history.replaceState(pageState, "", cleanPath + (openDoorDuesOnLoad ? "" : window.location.search));
         window.scrollTo(0, 0);
       }
 
@@ -624,15 +635,51 @@
       window.addEventListener("load", updateNavigation);
       updateNavigation();
 
+      var doorduesLink = document.querySelector('.billing a[href="doordues.html"]');
+      var doorduesView = document.getElementById("doordues-view");
+      var doorduesFrame = doorduesView.querySelector("iframe");
+      var pageElements = [
+        document.querySelector(".skip-link"),
+        document.querySelector(".site-header"),
+        document.querySelector("main"),
+        document.querySelector(".site-footer")
+      ];
+      var homeTitle = document.title;
+      function showDoorDues(pushState) {
+        if (pushState) window.history.pushState({ doornoticeView: "doordues" }, "", "/");
+        pageElements.forEach(function (element) { element.hidden = true; });
+        doorduesView.hidden = false;
+        document.body.style.overflow = "hidden";
+        document.title = "DoorDues — DoorNotice";
+        if (doorduesFrame.src === "about:blank") doorduesFrame.src = "doordues.html";
+      }
+      function showHome() {
+        doorduesView.hidden = true;
+        pageElements.forEach(function (element) { element.hidden = false; });
+        document.body.style.overflow = "";
+        document.title = homeTitle;
+      }
+      window.addEventListener("popstate", function (event) {
+        if (event.state && event.state.doornoticeView === "doordues") showDoorDues(false);
+        else showHome();
+      });
+      if (doorduesLink) {
+        doorduesLink.addEventListener("click", function (event) {
+          event.preventDefault();
+          showDoorDues(true);
+        });
+      }
+      if (openDoorDuesOnLoad || window.history.state && window.history.state.doornoticeView === "doordues") {
+        showDoorDues(false);
+      }
+
       document.addEventListener("click", function (event) {
         var link = event.target.closest && event.target.closest('a[href^="#"]');
         if (!link) return;
         var target = document.getElementById(link.getAttribute("href").slice(1));
-        if (!target || !sectionIds.includes(target.id)) return;
+        if (!target) return;
 
         event.preventDefault();
-        var hash = "#" + target.id;
-        if (window.location.hash !== hash) window.history.pushState(null, "", hash);
         var header = document.querySelector(".site-header");
         var headerHeight = header ? header.getBoundingClientRect().height : 0;
         var visibleHeight = window.innerHeight - headerHeight;
@@ -644,6 +691,7 @@
           top: targetTop,
           behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
         });
+        if (link.classList.contains("skip-link")) target.focus({ preventScroll: true });
         var menu = link.closest("details");
         if (menu) menu.open = false;
       });

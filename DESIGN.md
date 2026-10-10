@@ -17,5 +17,5 @@ The site presents a working society app through the three roles that use it: com
 - Describe DoorNotice as in pilot with live demos available.
 - Use an explicitly labelled illustrative role preview with generic content; do not publish the supplied screenshots or proposal pages because they contain society/resident details.
 - Describe the DoorDues workflow as bill-PDF generation followed by upload to DoorNotice. Do not imply automatic synchronization.
-- Route demo enquiries to `shinto.chacko@icloud.com`.
+- Route demo enquiries to `contact@doornotice.com`.
 - Intended public domain: `www.doornotice.com`.

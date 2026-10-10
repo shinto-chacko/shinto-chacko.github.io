@@ -7,6 +7,7 @@
   <meta name="description" content="DoorDues is a housing-society billing workspace for maintenance bills, payment records, overdue notices, and reports.">
   <title>DoorDues — Society billing, in one workspace</title>
   <script>
+    if (window.top === window.self) window.location.replace("/?view=doordues");
     (function () {
       if ("scrollRestoration" in window.history) {
         window.history.scrollRestoration = "manual";
@@ -299,8 +300,9 @@
     .contact h2 { max-width: 12ch; font-size: clamp(2.8rem, 5.5vw, 5rem); }
     .contact p { max-width: 54ch; margin: 1.1rem 0 0; color: #e4fff0; }
     .site-footer { padding: 1.35rem 0; background: linear-gradient(110deg, #173908, var(--green-deep)); color: #d4e8dd; }
-    .footer-row { font-size: .76rem; }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: .76rem; }
     .footer-row p { margin: 0; }
+    .footer-email { margin-left: auto; color: inherit; overflow-wrap: anywhere; text-underline-offset: .2em; }
     .footer-brand { color: white; font-weight: 800; }
 
     @media (max-width: 900px) {
@@ -381,20 +383,20 @@
         <img class="brand-logo" src="assets/doordues-logo.png" alt="" width="940" height="385">
       </a>
       <nav class="header-nav" aria-label="Main navigation">
-        <a href="index.html">DoorNotice</a>
+        <a href="/" target="_top">DoorNotice</a>
         <a href="#workflow">How it works</a>
         <a href="#features">Features</a>
         <a href="#contact">Contact</a>
-        <a class="nav-cta" href="mailto:shinto.chacko@icloud.com?subject=DoorDues%20demo%20request">Email for a demo</a>
+        <a class="nav-cta" href="mailto:contact@doornotice.com?subject=DoorDues%20demo%20request">Email for a demo</a>
       </nav>
       <details class="mobile-menu">
         <summary>Menu</summary>
         <nav aria-label="Mobile navigation">
-          <a href="index.html">DoorNotice</a>
+          <a href="/" target="_top">DoorNotice</a>
           <a href="#workflow">How it works</a>
           <a href="#features">Features</a>
           <a href="#contact">Contact</a>
-          <a class="nav-cta" href="mailto:shinto.chacko@icloud.com?subject=DoorDues%20demo%20request">Email for a demo</a>
+          <a class="nav-cta" href="mailto:contact@doornotice.com?subject=DoorDues%20demo%20request">Email for a demo</a>
         </nav>
       </details>
     </div>
@@ -407,7 +409,7 @@
           <h1>Society billing, from <em>bill to balance.</em></h1>
           <p class="hero-lede">DoorDues is a lightweight billing workspace for housing-society office-bearers and managing committee members. <strong>No software installation is required: the main app file is under 1 MB and runs in your browser.</strong></p>
           <div class="hero-actions">
-            <a class="button-primary" href="mailto:shinto.chacko@icloud.com?subject=DoorDues%20demo%20request">
+            <a class="button-primary" href="mailto:contact@doornotice.com?subject=DoorDues%20demo%20request">
               Email us for a demo
             </a>
             <a class="text-link" href="#workflow">See the monthly workflow <span aria-hidden="true">↓</span></a>
@@ -539,6 +541,7 @@
   <footer class="site-footer">
     <div class="wrap footer-row">
       <p><span class="footer-brand">DoorDues</span> · Developed by Digital Minds</p>
+      <a class="footer-email" href="mailto:contact@doornotice.com">contact@doornotice.com</a>
     </div>
   </footer>
 </body>
