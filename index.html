@@ -106,7 +106,7 @@
     }
     .pilot-dot { width: 8px; height: 8px; border-radius: 50%; background: #f2d36e; box-shadow: 0 0 0 3px rgba(242, 211, 110, .18); }
     h1, h2, h3, p { margin-top: 0; }
-    h1, h2, .role-admin h3, .contact h2 { font-family: var(--display); }
+    h1, h2, .role-slide-copy h3, .contact h2 { font-family: var(--display); }
     h1 {
       max-width: 10ch; margin-bottom: 1.25rem; font-size: clamp(3.1rem, 6.5vw, 5.65rem);
       line-height: 1.02; letter-spacing: -.075em; font-weight: 760;
@@ -176,42 +176,28 @@
     .section-intro { max-width: 46ch; margin: 0; color: var(--muted); font-size: .98rem; }
 
     .roles { background: linear-gradient(180deg, #f3f5f7 0%, #ebf5f3 100%); }
-    .role-layout { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(300px, .88fr); gap: 1rem; align-items: stretch; }
-    .role-admin {
-      position: relative; overflow: hidden; min-height: 400px; padding: clamp(1.5rem, 3vw, 2.4rem);
-      border-radius: 22px; background: linear-gradient(145deg, #30266e, #5140aa 70%, #6150bd); color: white;
-      box-shadow: 0 20px 46px rgba(53, 40, 111, .16);
-    }
-    .role-admin::after {
-      content: ""; position: absolute; right: -6rem; bottom: -8rem; width: 22rem; aspect-ratio: 1;
-      border: 1px solid rgba(255, 255, 255, .15); border-radius: 50%;
-      box-shadow: 0 0 0 26px rgba(255, 255, 255, .035), 0 0 0 58px rgba(255, 255, 255, .025);
-    }
+    .role-deck { display: grid; gap: 1rem; }
+    .role-slide { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); min-height: 410px; overflow: hidden; border: 1px solid rgba(28, 32, 41, .08); border-radius: 22px; background: white; box-shadow: 0 20px 46px rgba(29, 52, 63, .1); }
+    .role-slide[hidden] { display: none; }
+    .role-slide-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(1.6rem, 3.5vw, 3rem); background: linear-gradient(145deg, #30266e, #5140aa 70%, #6150bd); color: white; }
+    .role-slide.security .role-slide-copy { background: linear-gradient(145deg, #075c59, #087e78 70%, #168e91); }
+    .role-slide.residents .role-slide-copy { background: linear-gradient(145deg, #214d82, #1766bd 72%, #438bd1); }
     .role-kicker { display: inline-flex; align-items: center; gap: .5rem; margin-bottom: 1.2rem; color: #eeeaff; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
     .role-kicker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #edce60; }
-    .role-admin h3, .role-detail h3 { margin-bottom: .7rem; font-size: clamp(1.55rem, 2.6vw, 2.2rem); letter-spacing: -.055em; line-height: 1.13; }
-    .role-admin > p { max-width: 48ch; margin-bottom: 1.5rem; color: #e7e3fb; font-size: .9rem; }
-    .admin-actions { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; max-width: 490px; }
-    .admin-actions span { padding: .66rem .75rem; border: 1px solid rgba(255, 255, 255, .18); border-radius: 10px; background: rgba(17, 14, 51, .25); color: #f3f0ff; font-size: .75rem; }
-    .role-stack { display: grid; gap: 1rem; }
-    .role-detail { padding: 1.5rem 1.55rem; border: 1px solid var(--line); border-radius: 19px; background: white; box-shadow: 0 8px 24px rgba(29, 52, 63, .055); }
-    .role-detail.security { border-color: #d5e9e4; background: linear-gradient(140deg, #fff 52%, #edf8f5); }
-    .role-detail.owner { border-color: #e5e0f4; background: linear-gradient(140deg, #fff 52%, #f1effb); }
-    .role-detail .role-kicker { margin-bottom: .65rem; color: var(--teal-dark); }
-    .role-detail.owner .role-kicker { color: var(--violet); }
-    .role-detail h3 { margin-bottom: .45rem; font-size: 1.32rem; }
-    .role-detail p { margin-bottom: .8rem; color: var(--muted); font-size: .81rem; }
-    .role-detail ul { display: flex; flex-wrap: wrap; gap: .38rem; margin: 0; padding: 0; list-style: none; }
-    .role-detail li { padding: .28rem .52rem; border-radius: 999px; background: #e5f4f0; color: #135c55; font-size: .66rem; font-weight: 650; }
-    .role-detail.owner li { background: #eeebf8; color: #41347e; }
-    .multi-flat {
-      display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 1rem;
-      margin-top: 1rem; padding: 1.1rem 1.25rem; border: 1px solid #d3e5df; border-radius: 16px; background: #fff;
-    }
-    .multi-flat-icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 13px; background: #ddf2ec; color: var(--teal-dark); }
-    .multi-flat-icon svg { width: 22px; height: 22px; }
-    .multi-flat strong { display: block; font-size: .82rem; }
-    .multi-flat span { display: block; color: var(--muted); font-size: .72rem; }
+    .role-slide-copy h3 { max-width: 15ch; margin-bottom: .8rem; font-size: clamp(1.8rem, 3.5vw, 3rem); letter-spacing: -.06em; line-height: 1.08; }
+    .role-slide-copy p { max-width: 44ch; margin: 0; color: #e7e3fb; font-size: .92rem; }
+    .role-slide.security .role-slide-copy p, .role-slide.residents .role-slide-copy p { color: #e7f7f5; }
+    .role-slide-content { display: flex; flex-direction: column; justify-content: center; padding: clamp(1.5rem, 3.4vw, 2.8rem); }
+    .role-slide-content h4 { margin: 0 0 1rem; color: var(--muted); font-size: .72rem; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+    .role-feature-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1.5rem; margin: 0; padding: 0; list-style: none; }
+    .role-feature-list li { padding: .95rem 0; border-top: 1px solid var(--line); }
+    .role-feature-list strong { display: block; margin-bottom: .2rem; font-size: .88rem; }
+    .role-feature-list span { display: block; color: var(--muted); font-size: .76rem; line-height: 1.5; }
+    .role-deck-controls { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; }
+    .role-deck-controls button { display: grid; width: 48px; height: 48px; place-items: center; border: 1px solid #cfd8dc; border-radius: 50%; background: white; color: var(--ink); cursor: pointer; transition: color .18s ease, background-color .18s ease, border-color .18s ease, transform .18s ease; }
+    .role-deck-controls button:hover { transform: translateY(-2px); border-color: var(--teal); background: var(--teal); color: white; }
+    .role-deck-controls button svg { width: 20px; height: 20px; }
+    .role-slide-status { min-width: 150px; color: var(--muted); font-size: .78rem; font-weight: 700; text-align: center; }
 
     .why { padding-top: 0; background: #ebf5f3; }
     .why-band {
@@ -249,10 +235,6 @@
 
     @media (max-width: 940px) {
       .hero-grid { grid-template-columns: minmax(0, .92fr) minmax(360px, 1.08fr); gap: 2rem; }
-      .role-layout { grid-template-columns: 1fr; }
-      .role-admin { min-height: 0; }
-      .role-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .role-detail { padding: 1.25rem; }
     }
     @media (max-width: 700px) {
       .wrap { width: min(100% - 36px, 560px); }
@@ -285,9 +267,11 @@
       .preview-body { min-height: 0; padding: 1rem; }
       .section-heading { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
       .section-heading h2 { max-width: 14ch; }
-      .role-stack { grid-template-columns: 1fr; }
-      .role-admin { padding: 1.5rem; }
-      .role-detail { padding: 1.35rem; }
+      .role-slide { grid-template-columns: 1fr; }
+      .role-slide-copy { min-height: 240px; }
+      .role-slide-content { padding: 1.4rem; }
+      .role-feature-list { grid-template-columns: 1fr; }
+      .role-deck-controls { justify-content: center; }
       .why-band { grid-template-columns: 1fr; gap: 1rem; }
       .billing-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .billing h2 { max-width: 14ch; }
@@ -299,9 +283,6 @@
       .preview-task { grid-template-columns: 34px minmax(0, 1fr); gap: .6rem; padding: .72rem; }
       .preview-task-icon { width: 34px; height: 34px; }
       .preview-tag { grid-column: 2; }
-      .admin-actions { grid-template-columns: 1fr; }
-      .role-admin h3 { max-width: 12ch; }
-      .multi-flat { grid-template-columns: 1fr; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -315,7 +296,7 @@
     OWN-WORLD: The app's teal-to-blue field, blue door mark with red bell, violet task controls, dark notice surfaces, and warm gold signals carry across the page.
     STORY: See what each role does, understand the DoorDues bill-PDF handoff, and request a pilot demo.
     FIRST VIEWPORT: DoorNotice wordmark and navigation above a full-colour promise, pilot action, and an interactive app illustration with synthetic content only.
-    FORM: A role-first operations overview, staged as one shared society workspace rather than a generic SaaS feature grid.
+    FORM: Three navigable role slides with task details, presented as one shared society workspace rather than a generic SaaS feature grid.
   -->
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
@@ -434,43 +415,67 @@
           <h2>One society. Three everyday roles.</h2>
           <p class="section-intro">DoorNotice brings the committee, the gate and residents into one practical flow, with tools shaped around what each person needs to do.</p>
         </div>
-        <div class="role-layout">
-          <article class="role-admin">
-            <span class="role-kicker">For the committee</span>
-            <h3>Keep society updates and follow-up in view.</h3>
-            <p>Post notices for everyone or selected flats, add attachments, review pending owner approvals and resident-reported incidents, and find the records you need.</p>
-            <div class="admin-actions" aria-label="Committee features">
-              <span>Post notices with attachments</span>
-              <span>Review owner approvals</span>
-              <span>Check reported incidents</span>
-              <span>Search flats and vehicles</span>
-              <span>View security logs</span>
-              <span>Manage access controls</span>
+        <div class="role-deck" data-role-deck aria-roledescription="carousel" aria-label="DoorNotice roles">
+          <article class="role-slide committee" role="group" aria-roledescription="slide" aria-label="Committee" data-slide-name="Committee">
+            <div class="role-slide-copy">
+              <span class="role-kicker">For the committee</span>
+              <h3>Keep society updates and follow-up in view.</h3>
+              <p>Bring notices, approvals and society records into one committee workflow. Choose who receives an update and keep follow-up easy to find.</p>
+            </div>
+            <div class="role-slide-content">
+              <h4>Committee workspace</h4>
+              <ul class="role-feature-list">
+                <li><strong>Targeted notices</strong><span>Post to all residents or selected flats, with attachments.</span></li>
+                <li><strong>Owner approvals</strong><span>Review pending requests and keep decisions moving.</span></li>
+                <li><strong>Incident follow-up</strong><span>Check resident-reported issues and their status.</span></li>
+                <li><strong>Flat and vehicle search</strong><span>Find society records when the committee needs them.</span></li>
+                <li><strong>Security logs</strong><span>Review gate activity alongside society updates.</span></li>
+                <li><strong>Access controls</strong><span>Manage access for the society workspace.</span></li>
+              </ul>
             </div>
           </article>
-          <div class="role-stack">
-            <article class="role-detail security">
+          <article class="role-slide security" role="group" aria-roledescription="slide" aria-label="Security staff" data-slide-name="Security staff" hidden>
+            <div class="role-slide-copy">
               <span class="role-kicker">For security staff</span>
               <h3>Handle the gate with a clear log.</h3>
-              <p>Record visitor and daily-help entries, and keep check-in and check-out activity together.</p>
-              <ul>
-                <li>Visitor entry</li><li>Daily-help entry</li><li>Security log</li>
+              <p>Record who enters and leaves, and keep visitor and daily-help activity together for the society.</p>
+            </div>
+            <div class="role-slide-content">
+              <h4>At the gate</h4>
+              <ul class="role-feature-list">
+                <li><strong>Visitor entry</strong><span>Record visitor arrivals and check-outs.</span></li>
+                <li><strong>Daily-help records</strong><span>Track domestic-help entry and check-out activity.</span></li>
+                <li><strong>Multi-flat check-in</strong><span>Check in daily help visiting several flats in sequence.</span></li>
+                <li><strong>Security log</strong><span>Keep a clear record of gate activity for follow-up.</span></li>
               </ul>
-            </article>
-            <article class="role-detail owner">
+            </div>
+          </article>
+          <article class="role-slide residents" role="group" aria-roledescription="slide" aria-label="Owners and residents" data-slide-name="Owners and residents" hidden>
+            <div class="role-slide-copy">
               <span class="role-kicker">For owners and residents</span>
               <h3>See updates. Respond when needed.</h3>
-              <p>Approve visitors, view notices and bills, check logs, and report incidents with status follow-up.</p>
-              <ul>
-                <li>Visitor approvals</li><li>Notices and bills</li><li>Incident status</li>
+              <p>Keep useful society information close, respond to requests and follow up on issues from your resident view.</p>
+            </div>
+            <div class="role-slide-content">
+              <h4>Resident view</h4>
+              <ul class="role-feature-list">
+                <li><strong>Visitor approvals</strong><span>Review visitor requests and respond when needed.</span></li>
+                <li><strong>Society notices</strong><span>Read updates and attachments shared by the committee.</span></li>
+                <li><strong>Bills</strong><span>View bills uploaded to DoorNotice by the society.</span></li>
+                <li><strong>Incident reporting</strong><span>Report an issue and check its status follow-up.</span></li>
               </ul>
-            </article>
+            </div>
+          </article>
+          <div class="role-deck-controls" aria-label="Slide navigation">
+            <button type="button" data-slide-previous aria-label="Previous slide">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14.5 5-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <span class="role-slide-status" data-slide-status aria-live="polite" aria-atomic="true">01 / 03 · Committee</span>
+            <button type="button" data-slide-next aria-label="Next slide">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9.5 5 7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           </div>
         </div>
-        <aside class="multi-flat">
-          <span class="multi-flat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 20h18M5 20V5l7-2v17M12 9l7-2v13M8 8h.01M8 12h.01M15 11h.01M15 15h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span><strong>One useful detail for busy gates: multi-flat daily-help check-in.</strong><span>Security can check in domestic help visiting several flats in sequence.</span></span>
-        </aside>
       </div>
     </section>
 
@@ -549,6 +554,37 @@
           tab.tabIndex = selected ? 0 : -1;
           document.getElementById(tab.getAttribute("aria-controls")).hidden = !selected;
         });
+      }
+
+      var roleDeck = document.querySelector("[data-role-deck]");
+      if (roleDeck) {
+        var roleSlides = Array.prototype.slice.call(roleDeck.querySelectorAll(".role-slide"));
+        var roleStatus = roleDeck.querySelector("[data-slide-status]");
+        var currentRoleSlide = 0;
+        function showRoleSlide(index) {
+          currentRoleSlide = (index + roleSlides.length) % roleSlides.length;
+          roleSlides.forEach(function (slide, slideIndex) {
+            slide.hidden = slideIndex !== currentRoleSlide;
+            slide.setAttribute("aria-label", "Slide " + (slideIndex + 1) + " of " + roleSlides.length + ": " + slide.getAttribute("data-slide-name"));
+          });
+          roleStatus.textContent = String(currentRoleSlide + 1).padStart(2, "0") + " / " + String(roleSlides.length).padStart(2, "0") + " · " + roleSlides[currentRoleSlide].getAttribute("data-slide-name");
+        }
+        roleDeck.querySelector("[data-slide-previous]").addEventListener("click", function () {
+          showRoleSlide(currentRoleSlide - 1);
+        });
+        roleDeck.querySelector("[data-slide-next]").addEventListener("click", function () {
+          showRoleSlide(currentRoleSlide + 1);
+        });
+        roleDeck.addEventListener("keydown", function (event) {
+          if (event.altKey || event.ctrlKey || event.metaKey) return;
+          if (event.key === "ArrowLeft") showRoleSlide(currentRoleSlide - 1);
+          else if (event.key === "ArrowRight") showRoleSlide(currentRoleSlide + 1);
+          else if (event.key === "Home") showRoleSlide(0);
+          else if (event.key === "End") showRoleSlide(roleSlides.length - 1);
+          else return;
+          event.preventDefault();
+        });
+        showRoleSlide(0);
       }
 
       var sectionIds = ["product", "roles", "billing", "contact"];
