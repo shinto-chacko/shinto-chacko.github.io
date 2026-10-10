@@ -7,7 +7,7 @@ The site presents a working society app through the three roles that use it: com
 ## Visual language
 
 - **Palette:** teal-to-blue fields from the DoorNotice app; violet action surfaces; dark charcoal record panels; warm muted-gold state accents; clean pale neutral content areas.
-- **Identity:** use a bold, black DoorNotice text wordmark in the homepage header; retain the supplied blue open-door/red-bell icon inside the illustrative app preview. Keep the existing DoorDues logo for the secondary billing product.
+- **Identity:** pair the supplied blue open-door/red-bell icon with a bold, black DoorNotice wordmark in the homepage header; retain the icon in the illustrative app preview. Keep the existing DoorDues logo for the secondary billing product.
 - **Typography:** native system sans-serif for readable product UI and clear, compact headings.
 - **Surfaces:** app-inspired control states and record rows; restrained rounded corners; shadows reserved for layered preview surfaces; avoid generic equal feature-card grids.
 - **Motion and navigation:** sticky translucent navigation with active-section state, keyboard-operable role tabs, smooth anchor navigation that accounts for the header, and reduced-motion support.

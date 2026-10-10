@@ -61,7 +61,8 @@
       backdrop-filter: blur(18px) saturate(140%);
     }
     .header-row { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
-    .brand { display: inline-flex; align-items: center; flex: 0 0 auto; text-decoration: none; }
+    .brand { display: inline-flex; align-items: center; gap: .65rem; flex: 0 0 auto; text-decoration: none; }
+    .brand img { display: block; width: 62px; height: 62px; border-radius: 15px; }
     .brand-name { color: #000; font-size: clamp(1.45rem, 2vw, 1.6rem); font-weight: 850; letter-spacing: -.055em; }
     .header-nav {
       display: flex; align-items: center; gap: .18rem; padding: .32rem;
@@ -256,6 +257,7 @@
     @media (max-width: 700px) {
       .wrap { width: min(100% - 36px, 560px); }
       .header-row { min-height: 68px; }
+      .brand img { width: 50px; height: 50px; border-radius: 13px; }
       html { scroll-padding-top: 68px; }
       .header-nav { display: none; }
       .mobile-menu { position: relative; display: block; }
@@ -318,6 +320,7 @@
   <header class="site-header">
     <div class="wrap header-row">
       <a class="brand" href="#top" aria-label="DoorNotice home">
+        <img src="assets/doornotice-icon.png" alt="" width="413" height="453">
         <span class="brand-name">DoorNotice</span>
       </a>
       <nav class="header-nav" aria-label="Main navigation">
