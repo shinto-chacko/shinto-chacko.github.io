@@ -540,10 +540,14 @@
     (function () {
       if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
       var openDoorDuesOnLoad = window.location.search === "?view=doordues";
+      var openHomeOnLoad = window.location.search === "?view=home";
       var cleanPath = window.location.pathname === "/index.html" ? "/" : window.location.pathname;
-      if (window.location.hash || cleanPath !== window.location.pathname || openDoorDuesOnLoad) {
-        var pageState = openDoorDuesOnLoad ? { doornoticeView: "doordues" } : window.history.state;
-        window.history.replaceState(pageState, "", cleanPath + (openDoorDuesOnLoad ? "" : window.location.search));
+      if (window.location.hash || cleanPath !== window.location.pathname || openDoorDuesOnLoad || openHomeOnLoad) {
+        var pageState = openDoorDuesOnLoad
+          ? { doornoticeView: "doordues" }
+          : openHomeOnLoad ? null : window.history.state;
+        var query = openDoorDuesOnLoad || openHomeOnLoad ? "" : window.location.search;
+        window.history.replaceState(pageState, "", cleanPath + query);
         window.scrollTo(0, 0);
       }
 
