@@ -177,7 +177,10 @@
     h2 { max-width: 16ch; margin-bottom: 0; font-size: clamp(2.25rem, 4.5vw, 3.85rem); line-height: 1.08; letter-spacing: -.068em; }
     .section-intro { max-width: 46ch; margin: 0; color: var(--muted); font-size: .98rem; }
 
-    .roles { background: linear-gradient(180deg, #f3f5f7 0%, #ebf5f3 100%); }
+    .roles {
+      padding-top: clamp(1.5rem, 2vw, 2rem);
+      background: linear-gradient(180deg, #f3f5f7 0%, #ebf5f3 100%);
+    }
     .role-deck { display: grid; gap: 1rem; }
     .role-slide { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); min-height: 410px; overflow: hidden; border: 1px solid rgba(28, 32, 41, .08); border-radius: 22px; background: white; box-shadow: 0 20px 46px rgba(29, 52, 63, .1); }
     .role-slide[hidden] { display: none; }
