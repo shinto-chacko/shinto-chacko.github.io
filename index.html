@@ -62,8 +62,8 @@
     }
     .header-row { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
     .brand { display: inline-flex; align-items: center; gap: .65rem; flex: 0 0 auto; text-decoration: none; }
-    .brand img { display: block; width: 42px; height: 42px; border-radius: 12px; }
-    .brand-name { color: var(--ink); font-size: 1.14rem; font-weight: 800; letter-spacing: -.055em; }
+    .brand img { display: block; width: clamp(56px, 6.7vw, 68px); height: clamp(56px, 6.7vw, 68px); border-radius: 16px; }
+    .brand-name { color: var(--ink); font-size: clamp(1.14rem, 1.55vw, 1.3rem); font-weight: 800; letter-spacing: -.055em; }
     .brand-name span { color: var(--ink); }
     .header-nav {
       display: flex; align-items: center; gap: .18rem; padding: .32rem;
@@ -258,6 +258,8 @@
     @media (max-width: 700px) {
       .wrap { width: min(100% - 36px, 560px); }
       .header-row { min-height: 68px; }
+      .brand img { width: 54px; height: 54px; border-radius: 14px; }
+      .brand-name { font-size: 1.14rem; }
       html { scroll-padding-top: 68px; }
       .header-nav { display: none; }
       .mobile-menu { position: relative; display: block; }
