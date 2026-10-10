@@ -3,20 +3,569 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7f9fc">
-  <meta name="description" content="DoorDues is a housing-society billing workspace for maintenance bills, payment records, overdue notices, and reports.">
-  <title>DoorDues — Society billing, in one workspace</title>
+  <meta name="theme-color" content="#087e78">
+  <meta name="description" content="DoorNotice helps housing societies coordinate committee notices, security activity and resident services. DoorDues is an optional maintenance billing add-on.">
+  <link rel="canonical" href="https://www.doornotice.com/">
+  <link rel="icon" type="image/png" href="assets/doornotice-icon.png">
+  <title>DoorNotice — Society life, in better sync</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --teal: #087e78;
+      --teal-dark: #075c59;
+      --teal-pale: #e6f6f2;
+      --blue: #398dec;
+      --blue-dark: #1766bd;
+      --violet: #5140aa;
+      --violet-deep: #35286f;
+      --gold: #c9ae49;
+      --red: #d9324c;
+      --ink: #1c2029;
+      --muted: #5a6471;
+      --line: #dce2e5;
+      --paper: #f5f7f7;
+      --white: #fff;
+      --night: #202128;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --display: "Trebuchet MS", var(--sans);
+      --measure: 68ch;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 78px; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; }
+    a { color: inherit; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--blue);
+      outline-offset: 4px;
+    }
+    .wrap { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
+    .skip-link {
+      position: absolute; z-index: 50; top: 1rem; left: 1rem; transform: translateY(-160%);
+      padding: .7rem 1rem; border: 2px solid var(--blue); background: white; color: var(--blue-dark);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .site-header {
+      position: sticky; top: 0; z-index: 20; border-bottom: 1px solid rgba(220, 226, 229, .78);
+      background: rgba(249, 251, 250, .88); -webkit-backdrop-filter: blur(18px) saturate(140%);
+      backdrop-filter: blur(18px) saturate(140%);
+    }
+    .header-row { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+    .brand { display: inline-flex; align-items: center; gap: .65rem; flex: 0 0 auto; text-decoration: none; }
+    .brand img { display: block; width: 42px; height: 42px; border-radius: 12px; }
+    .brand-name { color: var(--ink); font-size: 1.14rem; font-weight: 800; letter-spacing: -.055em; }
+    .brand-name span { color: var(--teal); }
+    .header-nav {
+      display: flex; align-items: center; gap: .18rem; padding: .32rem;
+      border: 1px solid rgba(220, 226, 229, .9); border-radius: 999px;
+      background: rgba(255, 255, 255, .82); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9);
+    }
+    .header-nav a {
+      display: inline-flex; min-height: 42px; align-items: center; justify-content: center;
+      padding: .55rem .84rem; border-radius: 999px; color: var(--muted);
+      font-size: .84rem; font-weight: 650; text-decoration: none;
+      transition: color .18s ease, background-color .18s ease, transform .18s ease;
+    }
+    .header-nav a:hover, .header-nav a[aria-current="location"] { background: var(--teal-pale); color: var(--teal-dark); }
+    .header-nav .nav-cta, .mobile-menu .nav-cta {
+      padding-inline: 1.05rem; background: var(--violet); color: white; font-weight: 750;
+      box-shadow: 0 5px 14px rgba(18, 36, 48, .12);
+    }
+    .header-nav .nav-cta:hover, .mobile-menu .nav-cta:hover { transform: translateY(-1px); background: var(--violet-deep); color: white; }
+    .mobile-menu { display: none; }
+
+    .hero {
+      position: relative; isolation: isolate; overflow: hidden; padding: clamp(4rem, 8vw, 7.2rem) 0 5.6rem;
+      background: linear-gradient(117deg, #067969 0%, #087f91 49%, #307dbd 100%);
+      color: white;
+    }
+    .hero::before, .hero::after { content: ""; position: absolute; z-index: -1; pointer-events: none; }
+    .hero::before {
+      top: -14rem; right: -8rem; width: 42rem; aspect-ratio: 1; border: 1px solid rgba(255, 255, 255, .13);
+      border-radius: 50%; box-shadow: 0 0 0 42px rgba(255, 255, 255, .035), 0 0 0 92px rgba(255, 255, 255, .025);
+    }
+    .hero::after {
+      right: 18%; bottom: -16rem; width: 34rem; aspect-ratio: 1; border: 1px solid rgba(255, 255, 255, .13);
+      border-radius: 50%;
+    }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, .92fr) minmax(440px, 1.08fr); align-items: center; gap: clamp(2.5rem, 6vw, 5.5rem); }
+    .hero-copy { position: relative; z-index: 1; }
+    .pilot-pill {
+      display: inline-flex; align-items: center; gap: .52rem; margin-bottom: 1.45rem; padding: .4rem .72rem;
+      border: 1px solid rgba(255, 255, 255, .3); border-radius: 999px;
+      background: rgba(4, 59, 65, .28); color: #fff; font-size: .76rem; font-weight: 700;
+    }
+    .pilot-dot { width: 8px; height: 8px; border-radius: 50%; background: #f2d36e; box-shadow: 0 0 0 3px rgba(242, 211, 110, .18); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, .role-admin h3, .contact h2 { font-family: var(--display); }
+    h1 {
+      max-width: 10ch; margin-bottom: 1.25rem; font-size: clamp(3.1rem, 6.5vw, 5.65rem);
+      line-height: 1.02; letter-spacing: -.075em; font-weight: 760;
+    }
+    .hero-lede { max-width: var(--measure); margin-bottom: 1.8rem; color: #e3fbf6; font-size: clamp(1rem, 1.35vw, 1.12rem); line-height: 1.75; }
+    .hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .button-primary, .button-secondary {
+      display: inline-flex; align-items: center; justify-content: center; gap: .62rem; min-height: 52px;
+      padding: .8rem 1.2rem; border-radius: 999px; font-size: .92rem; font-weight: 750; text-decoration: none;
+      transition: background-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+    .button-primary { background: white; color: var(--violet-deep); box-shadow: 0 10px 24px rgba(4, 46, 55, .2); }
+    .button-primary:hover { transform: translateY(-2px); background: #f4f0d8; box-shadow: 0 14px 28px rgba(4, 46, 55, .27); }
+    .button-primary svg { width: 17px; height: 17px; }
+    .button-secondary { border: 1px solid rgba(255, 255, 255, .46); color: white; }
+    .button-secondary:hover { transform: translateY(-2px); background: rgba(255, 255, 255, .12); }
+    .hero-note { margin: 1.15rem 0 0; color: #d7f1ec; font-size: .79rem; }
+
+    .preview-wrap { position: relative; min-width: 0; padding: .65rem .35rem 1.4rem 1rem; }
+    .preview-shadow {
+      position: absolute; inset: 1.2rem -.7rem .4rem .2rem; transform: rotate(2deg);
+      border: 1px solid rgba(255, 255, 255, .23); border-radius: 28px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .035));
+    }
+    .app-preview {
+      position: relative; overflow: hidden; border: 1px solid rgba(255, 255, 255, .62); border-radius: 25px;
+      background: #f3f3f5; color: var(--ink); box-shadow: 0 28px 70px rgba(10, 39, 60, .27);
+    }
+    .preview-head {
+      display: flex; align-items: center; justify-content: space-between; gap: .8rem;
+      min-height: 68px; padding: .85rem 1.2rem;
+      background: linear-gradient(105deg, #078878, #318cbe); color: white;
+    }
+    .preview-brand { display: flex; align-items: center; gap: .55rem; font-size: .92rem; font-weight: 750; letter-spacing: -.025em; }
+    .preview-brand img { width: 30px; height: 30px; border-radius: 9px; }
+    .preview-state { color: #effffb; font-size: .68rem; font-weight: 650; }
+    .preview-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: .28rem; padding: .7rem .8rem .2rem; background: #28272e; }
+    .preview-tab {
+      position: relative; min-height: 43px; padding: .5rem .3rem; border: 0; border-radius: 9px 9px 0 0;
+      background: transparent; color: #d0ceda; font: inherit; font-size: .71rem; font-weight: 650; cursor: pointer;
+    }
+    .preview-tab[aria-selected="true"] { background: var(--violet); color: white; }
+    .preview-tab[aria-selected="true"]::after { content: ""; position: absolute; right: 20%; bottom: 0; left: 20%; height: 3px; border-radius: 3px; background: #e4cd62; }
+    .preview-body { min-height: 326px; padding: 1.3rem; }
+    .preview-greeting { margin-bottom: 1rem; }
+    .preview-greeting strong { display: block; font-size: 1.08rem; letter-spacing: -.04em; }
+    .preview-greeting span { color: var(--muted); font-size: .76rem; }
+    .preview-task {
+      display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: .75rem;
+      margin-top: .65rem; padding: .83rem .85rem; border: 1px solid #e2e1e7; border-radius: 13px;
+      background: white; box-shadow: 0 4px 12px rgba(31, 33, 42, .045);
+    }
+    .preview-task-icon {
+      display: grid; width: 38px; height: 38px; place-items: center; border-radius: 12px;
+      background: #ece9fb; color: var(--violet);
+    }
+    .preview-task-icon svg { width: 20px; height: 20px; }
+    .preview-task strong { display: block; font-size: .78rem; line-height: 1.35; }
+    .preview-task small { display: block; color: var(--muted); font-size: .68rem; line-height: 1.45; }
+    .preview-tag { color: var(--teal-dark); font-size: .64rem; font-weight: 750; white-space: nowrap; }
+    .preview-foot { padding: .65rem 1rem; background: #e7e6e9; color: #5d5d67; font-size: .64rem; text-align: center; }
+    .preview-caption { position: relative; margin: .82rem 0 0; color: #e3f7f3; font-size: .69rem; text-align: right; }
+
+    .section { padding: clamp(4.5rem, 8vw, 7rem) 0; }
+    .section-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, .63fr); align-items: end; gap: 3rem; margin-bottom: 2.8rem; }
+    h2 { max-width: 16ch; margin-bottom: 0; font-size: clamp(2.25rem, 4.5vw, 3.85rem); line-height: 1.08; letter-spacing: -.068em; }
+    .section-intro { max-width: 46ch; margin: 0; color: var(--muted); font-size: .98rem; }
+
+    .roles { background: linear-gradient(180deg, #f3f5f7 0%, #ebf5f3 100%); }
+    .role-layout { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(300px, .88fr); gap: 1rem; align-items: stretch; }
+    .role-admin {
+      position: relative; overflow: hidden; min-height: 400px; padding: clamp(1.5rem, 3vw, 2.4rem);
+      border-radius: 22px; background: linear-gradient(145deg, #30266e, #5140aa 70%, #6150bd); color: white;
+      box-shadow: 0 20px 46px rgba(53, 40, 111, .16);
+    }
+    .role-admin::after {
+      content: ""; position: absolute; right: -6rem; bottom: -8rem; width: 22rem; aspect-ratio: 1;
+      border: 1px solid rgba(255, 255, 255, .15); border-radius: 50%;
+      box-shadow: 0 0 0 26px rgba(255, 255, 255, .035), 0 0 0 58px rgba(255, 255, 255, .025);
+    }
+    .role-kicker { display: inline-flex; align-items: center; gap: .5rem; margin-bottom: 1.2rem; color: #eeeaff; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
+    .role-kicker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #edce60; }
+    .role-admin h3, .role-detail h3 { margin-bottom: .7rem; font-size: clamp(1.55rem, 2.6vw, 2.2rem); letter-spacing: -.055em; line-height: 1.13; }
+    .role-admin > p { max-width: 48ch; margin-bottom: 1.5rem; color: #e7e3fb; font-size: .9rem; }
+    .admin-actions { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; max-width: 490px; }
+    .admin-actions span { padding: .66rem .75rem; border: 1px solid rgba(255, 255, 255, .18); border-radius: 10px; background: rgba(17, 14, 51, .25); color: #f3f0ff; font-size: .75rem; }
+    .role-stack { display: grid; gap: 1rem; }
+    .role-detail { padding: 1.5rem 1.55rem; border: 1px solid var(--line); border-radius: 19px; background: white; box-shadow: 0 8px 24px rgba(29, 52, 63, .055); }
+    .role-detail.security { border-color: #d5e9e4; background: linear-gradient(140deg, #fff 52%, #edf8f5); }
+    .role-detail.owner { border-color: #e5e0f4; background: linear-gradient(140deg, #fff 52%, #f1effb); }
+    .role-detail .role-kicker { margin-bottom: .65rem; color: var(--teal-dark); }
+    .role-detail.owner .role-kicker { color: var(--violet); }
+    .role-detail h3 { margin-bottom: .45rem; font-size: 1.32rem; }
+    .role-detail p { margin-bottom: .8rem; color: var(--muted); font-size: .81rem; }
+    .role-detail ul { display: flex; flex-wrap: wrap; gap: .38rem; margin: 0; padding: 0; list-style: none; }
+    .role-detail li { padding: .28rem .52rem; border-radius: 999px; background: #e5f4f0; color: #135c55; font-size: .66rem; font-weight: 650; }
+    .role-detail.owner li { background: #eeebf8; color: #41347e; }
+    .multi-flat {
+      display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 1rem;
+      margin-top: 1rem; padding: 1.1rem 1.25rem; border: 1px solid #d3e5df; border-radius: 16px; background: #fff;
+    }
+    .multi-flat-icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 13px; background: #ddf2ec; color: var(--teal-dark); }
+    .multi-flat-icon svg { width: 22px; height: 22px; }
+    .multi-flat strong { display: block; font-size: .82rem; }
+    .multi-flat span { display: block; color: var(--muted); font-size: .72rem; }
+
+    .why { padding-top: 0; background: #ebf5f3; }
+    .why-band {
+      display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); gap: 2.5rem; align-items: center;
+      padding: clamp(1.6rem, 4vw, 2.5rem); border: 1px solid #cfe2dc; border-radius: 21px;
+      background: rgba(255, 255, 255, .72); box-shadow: 0 12px 34px rgba(20, 76, 70, .055);
+    }
+    .why-band h2 { font-size: clamp(1.8rem, 3.4vw, 2.7rem); }
+    .why-band p { margin: 0; color: #44545b; font-size: .91rem; }
+
+    .billing { position: relative; overflow: hidden; background: #22212a; color: white; }
+    .billing::before { content: ""; position: absolute; inset: 0 0 auto; height: 6px; background: linear-gradient(90deg, #0c9887, #438de9 55%, #dfc85d); }
+    .billing-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(2.5rem, 7vw, 6.3rem); align-items: center; }
+    .billing h2 { max-width: 12ch; }
+    .billing-copy > p { max-width: 55ch; margin: 1.05rem 0 1.4rem; color: #d7d6df; font-size: .94rem; }
+    .billing .role-kicker { color: #e9dfaa; }
+    .billing .button-primary { background: #e4cf67; color: #292516; box-shadow: 0 10px 24px rgba(0, 0, 0, .2); }
+    .billing .button-primary:hover { background: #f1df82; }
+    .billing .button-secondary { border-color: rgba(255, 255, 255, .3); color: #f5f2ff; }
+    .billing-flow { display: grid; gap: .65rem; }
+    .billing-step { display: grid; grid-template-columns: 37px minmax(0, 1fr); align-items: center; gap: .9rem; padding: 1rem; border: 1px solid rgba(255, 255, 255, .12); border-radius: 14px; background: #2d2c35; }
+    .billing-step-index { display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid rgba(228, 207, 103, .45); border-radius: 50%; color: #ecdc86; font-size: .73rem; font-weight: 750; }
+    .billing-step strong { display: block; font-size: .82rem; }
+    .billing-step span:last-child { display: block; color: #c4c2cc; font-size: .72rem; }
+    .billing-caveat { margin: .4rem 0 0; color: #bab8c2; font-size: .72rem; }
+
+    .contact { position: relative; overflow: hidden; padding: clamp(4.5rem, 9vw, 7rem) 0; background: linear-gradient(117deg, #087c70, #087f91 53%, #347ebd); color: white; }
+    .contact-inner { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(245px, .44fr); align-items: end; gap: 3rem; }
+    .contact h2 { max-width: 12ch; font-size: clamp(2.6rem, 5.5vw, 4.7rem); }
+    .contact p { max-width: 54ch; margin: 1.1rem 0 0; color: #e3fbf6; }
+    .contact-action { display: flex; flex-direction: column; gap: .45rem; justify-self: end; padding: 1.15rem 1.35rem; border: 1px solid rgba(255, 255, 255, .45); border-radius: 17px; background: rgba(5, 59, 66, .2); color: white; font-weight: 750; text-decoration: none; transition: transform .18s ease, background-color .18s ease; }
+    .contact-action:hover { transform: translateY(-3px); background: rgba(5, 59, 66, .32); }
+    .contact-action small { color: #dcf4ee; font-size: .7rem; font-weight: 450; }
+    .site-footer { padding: 1.35rem 0; background: #17232b; color: #d3e0e2; }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: .76rem; }
+    .footer-row p { margin: 0; }
+    .footer-brand { color: white; font-weight: 800; }
+    .footer-meta { display: flex; gap: 1.15rem; align-items: center; }
+    .footer-meta a { color: #e0cf76; text-decoration: none; }
+    .footer-meta a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    @media (max-width: 940px) {
+      .hero-grid { grid-template-columns: minmax(0, .92fr) minmax(360px, 1.08fr); gap: 2rem; }
+      .role-layout { grid-template-columns: 1fr; }
+      .role-admin { min-height: 0; }
+      .role-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .role-detail { padding: 1.25rem; }
+    }
+    @media (max-width: 700px) {
+      .wrap { width: min(100% - 36px, 560px); }
+      .header-row { min-height: 68px; }
+      html { scroll-padding-top: 68px; }
+      .header-nav { display: none; }
+      .mobile-menu { position: relative; display: block; }
+      .mobile-menu summary {
+        display: flex; align-items: center; min-height: 42px; padding: .5rem .85rem;
+        border: 1px solid var(--line); border-radius: 999px; background: white; color: var(--teal-dark);
+        font-size: .84rem; font-weight: 700; cursor: pointer; list-style: none;
+      }
+      .mobile-menu summary::-webkit-details-marker { display: none; }
+      .mobile-menu summary::after { content: "＋"; margin-left: .55rem; font-size: .88rem; }
+      .mobile-menu[open] summary::after { content: "−"; }
+      .mobile-menu nav {
+        position: absolute; z-index: 5; top: calc(100% + .55rem); right: 0; display: grid; min-width: 225px;
+        gap: .15rem; padding: .55rem; border: 1px solid var(--line); border-radius: 16px;
+        background: rgba(255, 255, 255, .97); box-shadow: 0 18px 42px rgba(18, 36, 48, .18);
+      }
+      .mobile-menu nav a { padding: .7rem .78rem; border-radius: 10px; color: var(--ink); font-size: .85rem; font-weight: 650; text-decoration: none; }
+      .mobile-menu nav a:hover, .mobile-menu nav a[aria-current="location"] { background: var(--teal-pale); color: var(--teal-dark); }
+      .mobile-menu nav .nav-cta { margin-top: .2rem; color: white; }
+      .hero { padding: 4rem 0 4.2rem; }
+      .hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      h1 { max-width: 9ch; font-size: clamp(3.1rem, 13vw, 4.8rem); }
+      .preview-wrap { width: min(100%, 540px); margin-inline: auto; }
+      .preview-body { min-height: 0; padding: 1rem; }
+      .section-heading { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
+      .section-heading h2 { max-width: 14ch; }
+      .role-stack { grid-template-columns: 1fr; }
+      .role-admin { padding: 1.5rem; }
+      .role-detail { padding: 1.35rem; }
+      .why-band { grid-template-columns: 1fr; gap: 1rem; }
+      .billing-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .billing h2 { max-width: 14ch; }
+      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .contact-action { justify-self: start; }
+      .footer-row { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 390px) {
+      .wrap { width: calc(100% - 28px); }
+      .hero-actions { align-items: flex-start; flex-direction: column; gap: .75rem; }
+      .preview-tab { font-size: .64rem; }
+      .preview-task { grid-template-columns: 34px minmax(0, 1fr); gap: .6rem; padding: .72rem; }
+      .preview-task-icon { width: 34px; height: 34px; }
+      .preview-tag { grid-column: 2; }
+      .admin-actions { grid-template-columns: 1fr; }
+      .role-admin h3 { max-width: 12ch; }
+      .multi-flat { grid-template-columns: 1fr; }
+      .footer-meta { flex-wrap: wrap; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    THESIS: DoorNotice coordinates the everyday work shared by committee, security, and owners; this replaces a billing-only product page.
+    OWN-WORLD: The app's teal-to-blue field, blue door mark with red bell, violet task controls, dark notice surfaces, and warm gold signals carry across the page.
+    STORY: See what each role does, understand the DoorDues bill-PDF handoff, and request a pilot demo.
+    FIRST VIEWPORT: DoorNotice wordmark and navigation above a full-colour promise, pilot action, and an interactive app illustration with synthetic content only.
+    FORM: A role-first operations overview, staged as one shared society workspace rather than a generic SaaS feature grid.
+  -->
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a class="brand" href="#top" aria-label="DoorNotice home">
+        <img src="assets/doornotice-icon.png" alt="" width="413" height="453">
+        <span class="brand-name">Door<span>Notice</span></span>
+      </a>
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="#product">The app</a>
+        <a href="#roles">For your society</a>
+        <a href="#billing">DoorDues</a>
+        <a href="#contact">Contact</a>
+        <a class="nav-cta" href="mailto:shinto.chacko@icloud.com?subject=DoorNotice%20pilot%20demo">Request a demo</a>
+      </nav>
+      <details class="mobile-menu">
+        <summary>Menu</summary>
+        <nav aria-label="Mobile navigation">
+          <a href="#product">The app</a>
+          <a href="#roles">For your society</a>
+          <a href="#billing">DoorDues add-on</a>
+          <a href="#contact">Contact</a>
+          <a class="nav-cta" href="mailto:shinto.chacko@icloud.com?subject=DoorNotice%20pilot%20demo">Request a demo</a>
+        </nav>
+      </details>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <span class="pilot-pill"><span class="pilot-dot" aria-hidden="true"></span>DoorNotice is in pilot</span>
+          <h1>Society life, in better sync.</h1>
+          <p class="hero-lede">One practical app for the people who run, secure and live in your society. Share notices, manage visitor approvals, keep daily-help records, view bills and follow up on incidents in one place.</p>
+          <div class="hero-actions">
+            <a class="button-primary" href="mailto:shinto.chacko@icloud.com?subject=DoorNotice%20pilot%20demo">
+              Request a live demo
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="button-secondary" href="#roles">Explore the app</a>
+          </div>
+          <p class="hero-note">Built around the everyday needs of committee members, security staff and residents.</p>
+        </div>
+
+        <div class="preview-wrap" id="product">
+          <div class="preview-shadow" aria-hidden="true"></div>
+          <section class="app-preview" aria-label="Illustrative DoorNotice app preview">
+            <div class="preview-head">
+              <div class="preview-brand">
+                <img src="assets/doornotice-icon.png" alt="" width="413" height="453">
+                DoorNotice
+              </div>
+              <span class="preview-state">Society app · pilot</span>
+            </div>
+            <div class="preview-tabs" role="tablist" aria-label="Preview by society role">
+              <button class="preview-tab" id="tab-committee" type="button" role="tab" aria-selected="true" aria-controls="panel-committee">Committee</button>
+              <button class="preview-tab" id="tab-security" type="button" role="tab" aria-selected="false" aria-controls="panel-security" tabindex="-1">Security</button>
+              <button class="preview-tab" id="tab-owner" type="button" role="tab" aria-selected="false" aria-controls="panel-owner" tabindex="-1">Owner</button>
+            </div>
+            <div class="preview-body" id="panel-committee" role="tabpanel" aria-labelledby="tab-committee">
+              <div class="preview-greeting"><strong>Committee workspace</strong><span>Share updates and keep track of follow-up.</span></div>
+              <div class="preview-task">
+                <span class="preview-task-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h12v16H6zM9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span><strong>Society notices</strong><small>Send to all flats or selected flats</small></span><span class="preview-tag">POST</span>
+              </div>
+              <div class="preview-task">
+                <span class="preview-task-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 20 7v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span><strong>Approvals &amp; incidents</strong><small>Review resident requests and reports</small></span><span class="preview-tag">REVIEW</span>
+              </div>
+              <div class="preview-task">
+                <span class="preview-task-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V6l8-2v15M12 8l8-2v13h-8M8 10v.01M8 14v.01M16 11v.01M16 15v.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span><strong>Society records</strong><small>Search flats, vehicles and security logs</small></span><span class="preview-tag">VIEW</span>
+              </div>
+            </div>
+            <div class="preview-body" id="panel-security" role="tabpanel" aria-labelledby="tab-security" hidden>
+              <div class="preview-greeting"><strong>Security desk</strong><span>Keep entry handling and the daily log together.</span></div>
+              <div class="preview-task">
+                <span class="preview-task-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20h16M6 20V8l6-4 6 4v12M9 11h.01M15 11h.01M12 20v-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span><strong>Visitor entry</strong><small>Record entry and check-out</small></span><span class="preview-tag">LOG</span>
+              </div>
+              <div class="preview-task">
+                <span class="preview-task-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="7" cy="8" r="2" stroke="currentColor" stroke-width="1.6"/><circle cx="16.5" cy="7" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 18c.5-3 2-4.5 4.5-4.5s4 1.5 4.5 4.5M14 12c3.5 0 5.5 1.8 6 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+                <span><strong>Daily-help check-in</strong><small>Track check-in and check-out</small></span><span class="preview-tag">CHECK</span>
+              </div>
+              <div class="preview-task">
+                <span class="preview-task-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5h14v14H5zM8 9h8M8 12h8M8 15h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span><strong>Multi-flat sequence</strong><small>Check in daily help visiting multiple flats</small></span><span class="preview-tag">FLOW</span>
+              </div>
+            </div>
+            <div class="preview-body" id="panel-owner" role="tabpanel" aria-labelledby="tab-owner" hidden>
+              <div class="preview-greeting"><strong>Resident view</strong><span>Find society updates and everyday requests.</span></div>
+              <div class="preview-task">
+                <span class="preview-task-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 2.35 5.65M4 17v-5h5M12 8v4l3 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span><strong>Visitor approvals</strong><small>Review a visit request</small></span><span class="preview-tag">RESPOND</span>
+              </div>
+              <div class="preview-task">
+                <span class="preview-task-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h12v16H6zM9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span><strong>Notices &amp; bills</strong><small>View society updates and uploaded bills</small></span><span class="preview-tag">VIEW</span>
+              </div>
+              <div class="preview-task">
+                <span class="preview-task-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-8-4.4-8-11a4.4 4.4 0 0 1 8-2.5A4.4 4.4 0 0 1 20 10c0 6.6-8 11-8 11Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 12h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+                <span><strong>Incidents &amp; records</strong><small>Report issues and check their status</small></span><span class="preview-tag">UPDATE</span>
+              </div>
+            </div>
+            <div class="preview-foot">Illustrative preview · interface content is a sample</div>
+          </section>
+          <p class="preview-caption">Explore the app by role</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section roles" id="roles">
+      <div class="wrap">
+        <div class="section-heading">
+          <h2>One society. Three everyday roles.</h2>
+          <p class="section-intro">DoorNotice brings the committee, the gate and residents into one practical flow, with tools shaped around what each person needs to do.</p>
+        </div>
+        <div class="role-layout">
+          <article class="role-admin">
+            <span class="role-kicker">For the committee</span>
+            <h3>Keep society updates and follow-up in view.</h3>
+            <p>Post notices for everyone or selected flats, add attachments, review pending owner approvals and resident-reported incidents, and find the records you need.</p>
+            <div class="admin-actions" aria-label="Committee features">
+              <span>Post notices with attachments</span>
+              <span>Review owner approvals</span>
+              <span>Check reported incidents</span>
+              <span>Search flats and vehicles</span>
+              <span>View security logs</span>
+              <span>Manage access controls</span>
+            </div>
+          </article>
+          <div class="role-stack">
+            <article class="role-detail security">
+              <span class="role-kicker">For security staff</span>
+              <h3>Handle the gate with a clear log.</h3>
+              <p>Record visitor and daily-help entries, and keep check-in and check-out activity together.</p>
+              <ul>
+                <li>Visitor entry</li><li>Daily-help entry</li><li>Security log</li>
+              </ul>
+            </article>
+            <article class="role-detail owner">
+              <span class="role-kicker">For owners and residents</span>
+              <h3>See updates. Respond when needed.</h3>
+              <p>Approve visitors, view notices and bills, check logs, and report incidents with status follow-up.</p>
+              <ul>
+                <li>Visitor approvals</li><li>Notices and bills</li><li>Incident status</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+        <aside class="multi-flat">
+          <span class="multi-flat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 20h18M5 20V5l7-2v17M12 9l7-2v13M8 8h.01M8 12h.01M15 11h.01M15 15h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span><strong>One useful detail for busy gates: multi-flat daily-help check-in.</strong><span>Security can check in domestic help visiting several flats in sequence.</span></span>
+        </aside>
+      </div>
+    </section>
+
+    <section class="why" aria-labelledby="why-title">
+      <div class="wrap">
+        <div class="why-band">
+          <h2 id="why-title">Useful features, without the extra clutter.</h2>
+          <p>DoorNotice focuses on notices, security handling, visitor and daily-help records, bill visibility and resident services. The aim is a clear day-to-day experience for committee members, security staff and owners, without advertising clutter or unnecessary screens.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section billing" id="billing">
+      <div class="wrap billing-grid">
+        <div class="billing-copy">
+          <span class="role-kicker">Optional billing add-on · DoorDues</span>
+          <h2>Need more control over maintenance billing?</h2>
+          <p>DoorDues is the separate billing workspace for society setup, maintenance bill generation, offline payment records and dues reports. Add it when your committee wants a dedicated billing tool alongside DoorNotice.</p>
+          <a class="button-secondary" href="https://shinto-chacko.github.io/">Explore DoorDues</a>
+        </div>
+        <div>
+          <div class="billing-flow" aria-label="How DoorDues bills can be shown in DoorNotice">
+            <div class="billing-step"><span class="billing-step-index">1</span><span><strong>Generate maintenance bills in DoorDues</strong><span>Prepare individual or batch PDF bills for flats.</span></span></div>
+            <div class="billing-step"><span class="billing-step-index">2</span><span><strong>Upload the PDFs to DoorNotice</strong><span>Make the bills available within the society app.</span></span></div>
+            <div class="billing-step"><span class="billing-step-index">3</span><span><strong>Owners view bills flat-wise</strong><span>Keep bill visibility close to society notices and updates.</span></span></div>
+          </div>
+          <p class="billing-caveat">This is a bill-PDF upload flow between two products; DoorDues records payments separately.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="wrap contact-inner">
+        <div>
+          <h2>See how DoorNotice could work for your society.</h2>
+          <p>DoorNotice is in pilot. Request a live walkthrough of the committee, security and resident workflows, with DoorDues billing as an optional add-on.</p>
+        </div>
+        <a class="contact-action" href="mailto:shinto.chacko@icloud.com?subject=DoorNotice%20pilot%20demo">
+          Request a society demo
+          <small>shinto.chacko@icloud.com</small>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <p><span class="footer-brand">DoorNotice</span> · A society app by Digital Minds</p>
+      <div class="footer-meta"><a href="https://www.doornotice.com/">www.doornotice.com</a><a href="https://shinto-chacko.github.io/">DoorDues</a></div>
+    </div>
+  </footer>
+
   <script>
     (function () {
-      if ("scrollRestoration" in window.history) {
-        window.history.scrollRestoration = "manual";
-      }
-      var navigation = performance.getEntriesByType && performance.getEntriesByType("navigation");
+      if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
+      var navigation = window.performance.getEntriesByType && window.performance.getEntriesByType("navigation");
       if (navigation && navigation[0] && navigation[0].type === "reload" && window.location.hash) {
         window.history.replaceState(null, "", window.location.pathname + window.location.search);
         window.scrollTo(0, 0);
       }
-      var sectionIds = ["workflow", "features", "contact"];
+
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+      tabs.forEach(function (tab, index) {
+        tab.addEventListener("click", function () { selectTab(index); });
+        tab.addEventListener("keydown", function (event) {
+          var next = index;
+          if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+          else if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+          else if (event.key === "Home") next = 0;
+          else if (event.key === "End") next = tabs.length - 1;
+          else return;
+          event.preventDefault();
+          selectTab(next);
+          tabs[next].focus();
+        });
+      });
+      function selectTab(index) {
+        tabs.forEach(function (tab, tabIndex) {
+          var selected = tabIndex === index;
+          tab.setAttribute("aria-selected", selected ? "true" : "false");
+          tab.tabIndex = selected ? 0 : -1;
+          document.getElementById(tab.getAttribute("aria-controls")).hidden = !selected;
+        });
+      }
+
+      var sectionIds = ["product", "roles", "billing", "contact"];
       function updateNavigation() {
         var header = document.querySelector(".site-header");
         var marker = (header ? header.getBoundingClientRect().bottom : 0) + 24;
@@ -26,7 +575,7 @@
           if (section && section.getBoundingClientRect().top <= marker) current = id;
         });
         if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) current = "contact";
-        Array.prototype.forEach.call(document.querySelectorAll('.header-nav a[href^="#"], .mobile-menu nav a[href^="#"]'), function (link) {
+        document.querySelectorAll('.header-nav a[href^="#"], .mobile-menu nav a[href^="#"]').forEach(function (link) {
           if (link.getAttribute("href") === "#" + current) link.setAttribute("aria-current", "location");
           else link.removeAttribute("aria-current");
         });
@@ -47,21 +596,18 @@
       document.addEventListener("click", function (event) {
         var link = event.target.closest && event.target.closest('a[href^="#"]');
         if (!link) return;
-
         var target = document.getElementById(link.getAttribute("href").slice(1));
-        if (!target || !["workflow", "features", "contact"].includes(target.id)) return;
+        if (!target || !sectionIds.includes(target.id)) return;
 
         event.preventDefault();
         var hash = "#" + target.id;
-        if (window.location.hash !== hash) {
-          window.history.pushState(null, "", hash);
-        }
+        if (window.location.hash !== hash) window.history.pushState(null, "", hash);
         var header = document.querySelector(".site-header");
         var headerHeight = header ? header.getBoundingClientRect().height : 0;
         var visibleHeight = window.innerHeight - headerHeight;
-        var block = target.getBoundingClientRect().height <= visibleHeight ? "center" : "start";
-        var targetTop = target.getBoundingClientRect().top + window.scrollY;
-        if (block === "center") targetTop -= headerHeight + (visibleHeight - target.getBoundingClientRect().height) / 2;
+        var rect = target.getBoundingClientRect();
+        var targetTop = rect.top + window.scrollY;
+        if (rect.height <= visibleHeight) targetTop -= headerHeight + (visibleHeight - rect.height) / 2;
         else targetTop -= headerHeight;
         window.scrollTo({
           top: targetTop,
@@ -72,498 +618,5 @@
       });
     })();
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      color-scheme: light;
-      --blue: #0878e8;
-      --blue-dark: #0753b5;
-      --blue-deep: #092f66;
-      --blue-pale: #eef5ff;
-      --green: #61b512;
-      --green-dark: #2e620a;
-      --green-deep: #214a10;
-      --green-pale: #eff7e8;
-      --yellow: #f5b800;
-      --ink: #10213b;
-      --muted: #53647c;
-      --line: #d8e2ef;
-      --paper: #f7f9fc;
-      --white: #fff;
-      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
-      --sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-      --measure: 68ch;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 78px; }
-    body {
-      margin: 0;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: var(--sans);
-      font-size: 16px;
-      line-height: 1.65;
-      -webkit-font-smoothing: antialiased;
-    }
-    a { color: inherit; }
-    a:focus-visible, summary:focus-visible {
-      outline: 3px solid var(--blue);
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-    .wrap { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
-    .mono { font-family: var(--mono); }
-    .skip-link {
-      position: absolute;
-      left: 1rem;
-      top: 1rem;
-      z-index: 10;
-      transform: translateY(-160%);
-      padding: .7rem 1rem;
-      background: var(--white);
-      color: var(--blue-dark);
-      border: 2px solid var(--blue);
-    }
-    .skip-link:focus { transform: translateY(0); }
-
-    .site-header {
-      position: sticky; top: 0; z-index: 20; border-bottom: 1px solid rgba(216, 226, 239, .78);
-      background: rgba(248, 250, 252, .82); -webkit-backdrop-filter: blur(18px) saturate(145%);
-      backdrop-filter: blur(18px) saturate(145%); box-shadow: 0 8px 28px rgba(16, 33, 59, .045);
-    }
-    .header-row { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
-    .brand { display: inline-flex; align-items: center; flex: 0 0 auto; text-decoration: none; }
-    .brand-logo { display: block; width: clamp(136px, 17vw, 176px); height: auto; max-height: 72px; object-fit: contain; }
-    .header-nav {
-      display: flex; align-items: center; gap: .18rem; padding: .34rem;
-      border: 1px solid rgba(216, 226, 239, .9); border-radius: 999px;
-      background: rgba(255, 255, 255, .72); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9);
-    }
-    .header-nav a {
-      display: inline-flex; align-items: center; justify-content: center; min-height: 42px;
-      padding: .55rem .88rem; border-radius: 999px; color: var(--muted);
-      font-size: .86rem; font-weight: 600; text-decoration: none;
-      transition: color .18s ease, background-color .18s ease, transform .18s ease, box-shadow .18s ease;
-    }
-    .header-nav a:hover, .header-nav a[aria-current="location"] { color: var(--blue-dark); background: var(--blue-pale); }
-    .header-nav .nav-cta, .mobile-menu .nav-cta {
-      display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
-      padding: .65rem 1.05rem; background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: white; border-radius: 999px;
-      font-weight: 700; box-shadow: 0 5px 14px rgba(7, 83, 181, .2);
-      transition: background .18s ease, transform .18s ease, box-shadow .18s ease;
-    }
-    .header-nav .nav-cta:hover, .mobile-menu .nav-cta:hover {
-      background: linear-gradient(135deg, var(--blue-dark), var(--blue-deep)); color: white;
-      transform: translateY(-1px); box-shadow: 0 8px 20px rgba(7, 83, 181, .28);
-    }
-    .mobile-menu { display: none; }
-
-    .hero {
-      position: relative; isolation: isolate; padding: clamp(4.5rem, 9vw, 7.5rem) 0 5.5rem; overflow: hidden;
-      background:
-        radial-gradient(ellipse at 83% 16%, rgba(8, 120, 232, .1), transparent 30rem),
-        radial-gradient(ellipse at 94% 84%, rgba(97, 181, 18, .09), transparent 25rem);
-    }
-    .hero-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(470px, 1.1fr); align-items: center; gap: clamp(3rem, 7vw, 6.5rem); }
-    .hero-copy { position: relative; z-index: 1; }
-    h1, h2, h3, p { margin-top: 0; }
-    h1 {
-      max-width: 9ch; margin-bottom: 1.5rem; font-size: clamp(3.25rem, 6.2vw, 5.5rem);
-      line-height: 1.035; letter-spacing: -.075em; font-weight: 700;
-    }
-    h1 em { color: var(--blue-dark); font-style: normal; }
-    .hero-lede { max-width: var(--measure); margin-bottom: 2rem; color: #46566e; font-size: clamp(1rem, 1.35vw, 1.12rem); line-height: 1.75; }
-    .hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 1.3rem; }
-    .button-primary {
-      display: inline-flex; align-items: center; justify-content: center; gap: .65rem;
-      min-height: 52px; padding: .8rem 1.2rem; border-radius: 999px;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      color: var(--white); font-size: .95rem; font-weight: 700; text-decoration: none;
-      box-shadow: 0 10px 24px rgba(7, 83, 181, .22);
-      transition: background .18s ease, transform .18s ease, box-shadow .18s ease;
-    }
-    .button-primary:hover {
-      background: linear-gradient(135deg, var(--blue-dark), var(--blue-deep));
-      transform: translateY(-2px); box-shadow: 0 14px 28px rgba(7, 83, 181, .28);
-    }
-    .button-primary svg { width: 17px; height: 17px; }
-    .text-link { display: inline-flex; gap: .45rem; align-items: center; color: var(--blue-dark); font-weight: 700; font-size: .92rem; text-decoration-thickness: 1px; text-underline-offset: 4px; }
-    .text-link:hover { color: var(--blue-deep); }
-    .hero-note { margin: 1.4rem 0 0; color: var(--muted); font-size: .82rem; }
-
-    .ledger-stage { position: relative; min-width: 0; padding: 1.2rem 0 2rem 1.2rem; }
-    .ledger-stage::before {
-      content: ""; position: absolute; inset: 0 1.6rem 1.1rem 0;
-      background: linear-gradient(145deg, #dcecff 2%, var(--blue-pale) 54%, #e9f5df 100%);
-      clip-path: polygon(0 8%, 94% 0, 100% 92%, 7% 100%);
-    }
-    .ledger-sheet {
-      position: relative; z-index: 1; max-width: 580px; margin-left: auto; padding: clamp(1.25rem, 3vw, 2.1rem);
-      background: rgba(255, 255, 255, .97); border: 1px solid rgba(255, 255, 255, .9); border-radius: 20px;
-      box-shadow: 0 34px 76px rgba(9, 47, 102, .16), 0 5px 16px rgba(9, 47, 102, .06);
-      transform: rotate(.45deg); animation: sheet-settle .75s cubic-bezier(.16, 1, .3, 1) both;
-    }
-    @keyframes sheet-settle {
-      from { transform: translateY(12px) rotate(-.35deg); box-shadow: 0 14px 34px rgba(9, 47, 102, .08), 0 3px 10px rgba(9, 47, 102, .04); }
-      to { transform: translateY(0) rotate(.45deg); box-shadow: 0 34px 76px rgba(9, 47, 102, .16), 0 5px 16px rgba(9, 47, 102, .06); }
-    }
-    .sheet-top { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; padding-bottom: 1.3rem; border-bottom: 2px solid var(--ink); }
-    .sheet-org { color: var(--blue-dark); font-size: .69rem; font-weight: 800; letter-spacing: .075em; text-transform: uppercase; }
-    .sheet-title { margin: .42rem 0 0; font-size: 1.23rem; line-height: 1.2; letter-spacing: -.04em; }
-    .sheet-mark { position: relative; width: 33px; height: 33px; border: 1px solid var(--blue-dark); display: grid; place-items: center; color: var(--blue-dark); font-family: var(--mono); font-size: .7rem; }
-    .sheet-mark::after { content: ""; position: absolute; top: -4px; right: -4px; width: 8px; height: 8px; border: 1px solid var(--white); border-radius: 50%; background: var(--yellow); }
-    .sheet-meta { display: flex; justify-content: space-between; gap: 1rem; padding: .85rem 0; color: var(--muted); font-family: var(--mono); font-size: .63rem; text-transform: uppercase; letter-spacing: .04em; }
-    .sheet-meta strong { color: var(--ink); font-weight: 600; }
-    .statement { width: 100%; border-collapse: collapse; font-size: .76rem; }
-    .statement th { padding: .65rem .4rem; color: var(--muted); border-block: 1px solid var(--line); font-family: var(--mono); font-size: .58rem; font-weight: 500; text-align: left; text-transform: uppercase; letter-spacing: .06em; }
-    .statement th:last-child, .statement td:last-child { text-align: right; }
-    .statement td { padding: .68rem .4rem; border-bottom: 1px solid #edf1f6; }
-    .statement .amount { font-family: var(--mono); font-size: .68rem; white-space: nowrap; }
-    .statement-total td { border-top: 1px solid var(--ink); border-bottom: 0; font-weight: 800; }
-    .statement-total .amount { color: var(--green-dark); font-size: .74rem; }
-    .sheet-bottom { display: flex; align-items: center; justify-content: space-between; gap: .7rem; margin-top: 1rem; padding-top: .8rem; border-top: 1px dashed #bdcadb; color: var(--muted); font-family: var(--mono); font-size: .57rem; text-transform: uppercase; letter-spacing: .04em; }
-    .sheet-bottom strong { color: var(--green-dark); font-weight: 600; }
-    .illustration-label { position: relative; z-index: 2; width: max-content; max-width: 100%; margin: .9rem 0 0 auto; padding: .35rem .55rem; color: var(--muted); background: var(--paper); font-family: var(--mono); font-size: .57rem; letter-spacing: .04em; text-transform: uppercase; }
-    .ledger-rule { position: absolute; z-index: 2; left: 1.2rem; top: 32%; width: 3.8rem; height: 2px; background: var(--yellow); animation: rule-draw 1s cubic-bezier(.16, 1, .3, 1) both; transform-origin: left; }
-    @keyframes rule-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-
-    .section { padding: clamp(4.5rem, 8vw, 7rem) 0; }
-    .section-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(250px, .6fr); align-items: end; gap: 3rem; margin-bottom: 3.2rem; }
-    h2 { max-width: 15ch; margin-bottom: 0; font-size: clamp(2.35rem, 4.5vw, 4rem); line-height: 1.08; letter-spacing: -.065em; }
-    .section-intro { max-width: 46ch; margin: 0; color: var(--muted); font-size: 1rem; }
-
-    .workflow { background: var(--green-deep); color: white; }
-    .workflow .section-heading { margin-bottom: 3.6rem; }
-    .workflow h2 { color: white; }
-    .workflow .section-intro { color: #e0eed4; }
-    .workflow-track { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .8rem; }
-    .workflow-step {
-      position: relative; min-height: 205px; padding: 1.15rem 1rem;
-      border: 1px solid rgba(224, 238, 212, .2); border-radius: 16px;
-      background: linear-gradient(145deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .045));
-      box-shadow: 0 12px 26px rgba(10, 33, 18, .09);
-      transition: transform .2s ease, border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
-    }
-    .workflow-step:hover {
-      transform: translateY(-4px); border-color: rgba(197, 239, 155, .58);
-      background: linear-gradient(145deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .07));
-      box-shadow: 0 18px 34px rgba(10, 33, 18, .16);
-    }
-    .step-index {
-      display: inline-flex; align-items: center; min-height: 26px; margin-bottom: 1.1rem;
-      padding: .25rem .55rem; border: 1px solid rgba(197, 239, 155, .32); border-radius: 999px;
-      color: #c5ef9b; font-family: var(--mono); font-size: .62rem; letter-spacing: .025em;
-    }
-    .workflow-step h3 { margin-bottom: .6rem; font-size: 1.08rem; letter-spacing: -.035em; }
-    .workflow-step p { max-width: 21ch; margin: 0; color: #e0eed4; font-size: .84rem; line-height: 1.6; }
-    .workflow-arrow { position: absolute; top: 1.2rem; right: 1rem; color: #c5ef9b; font-size: .8rem; }
-
-    .capabilities { background: var(--green-pale); }
-    .capability-list { display: grid; gap: .72rem; }
-    .capability-row {
-      display: grid; grid-template-columns: minmax(180px, .72fr) minmax(0, 1.28fr); gap: 3rem;
-      padding: 1.35rem 1.45rem; border: 1px solid rgba(205, 220, 195, .9); border-radius: 15px;
-      background: rgba(255, 255, 255, .62); box-shadow: 0 5px 14px rgba(33, 74, 16, .035);
-      transition: transform .18s ease, border-color .18s ease, background-color .18s ease, box-shadow .18s ease;
-    }
-    .capability-row:hover {
-      transform: translateX(3px); border-color: #b2cc9f; background: rgba(255, 255, 255, .92);
-      box-shadow: 0 10px 22px rgba(33, 74, 16, .08);
-    }
-    .capability-row h3 { margin: 0; font-size: 1.12rem; letter-spacing: -.035em; }
-    .capability-row p { max-width: 60ch; margin: 0; color: #46566e; font-size: .94rem; }
-    .capability-row p strong { color: var(--green-dark); font-weight: 700; }
-    .capability-mark { display: inline-block; width: 8px; height: 8px; margin-right: .65rem; background: var(--green); transform: rotate(45deg); }
-
-    .local-section { padding: 0 0 clamp(4.5rem, 8vw, 7rem); background: var(--green-pale); }
-    .local-note {
-      display: grid; grid-template-columns: minmax(0, .78fr) minmax(300px, 1.22fr); gap: 3rem; align-items: start;
-      padding: clamp(1.6rem, 4vw, 2.6rem); border: 1px solid #d7e4cf; border-radius: 22px;
-      background: linear-gradient(140deg, rgba(255, 255, 255, .78), rgba(255, 255, 255, .48));
-      box-shadow: 0 20px 46px rgba(33, 74, 16, .065);
-    }
-    .local-note h2 { font-size: clamp(1.65rem, 3vw, 2.4rem); }
-    .local-copy p { max-width: 65ch; margin-bottom: .8rem; color: #46566e; font-size: .9rem; }
-    .local-copy p:last-child { margin-bottom: 0; }
-    .local-copy .fine-print { color: var(--muted); font-size: .76rem; }
-    .local-key { color: var(--blue-dark); font-family: var(--mono); font-size: .66rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
-
-    .contact {
-      position: relative; overflow: hidden; padding: clamp(4.5rem, 9vw, 8rem) 0;
-      background: radial-gradient(ellipse at 82% 18%, rgba(197, 239, 155, .2), transparent 29rem), linear-gradient(125deg, #245107, var(--green-dark) 56%, #34730d);
-      color: white;
-    }
-    .contact::after { content: "DD"; position: absolute; right: max(-2rem, calc((100vw - 1180px) / 2)); bottom: -5.1rem; color: rgba(0, 82, 56, .17); font-size: clamp(13rem, 32vw, 27rem); font-weight: 800; line-height: 1; letter-spacing: -.12em; pointer-events: none; }
-    .contact-inner { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, .48fr); align-items: end; gap: 3rem; }
-    .contact h2 { max-width: 12ch; font-size: clamp(2.8rem, 5.5vw, 5rem); }
-    .contact p { max-width: 54ch; margin: 1.1rem 0 0; color: #e4fff0; }
-    .contact-action {
-      display: inline-flex; flex-direction: column; align-items: flex-start; gap: .55rem; justify-self: end;
-      padding: 1.1rem 1.3rem; border: 1px solid rgba(255, 255, 255, .24); border-radius: 16px;
-      background: rgba(255, 255, 255, .09); color: white; font-size: 1rem; font-weight: 700;
-      text-decoration-thickness: 1px; text-underline-offset: 6px;
-      transition: transform .2s ease, background-color .2s ease, border-color .2s ease;
-    }
-    .contact-action:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, .5); background: rgba(255, 255, 255, .15); }
-    .contact-action small { color: #d5f7e3; font-family: var(--mono); font-size: .66rem; font-weight: 400; }
-    .contact-action:hover { color: #e4fff0; }
-    .site-footer { padding: 1.35rem 0; background: linear-gradient(110deg, #173908, var(--green-deep)); color: #d4e8dd; }
-    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: .76rem; }
-    .footer-row p { margin: 0; }
-    .footer-brand { color: white; font-weight: 800; }
-    .footer-note { font-family: var(--mono); font-size: .62rem; }
-
-    @media (max-width: 900px) {
-      .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(340px, .95fr); gap: 2.2rem; }
-      .workflow-track { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .workflow-step { min-height: 180px; }
-    }
-    @media (max-width: 700px) {
-      .wrap { width: min(100% - 36px, 560px); }
-      .header-row { min-height: 68px; }
-      html { scroll-padding-top: 68px; }
-      .header-nav { display: none; }
-      .mobile-menu { position: relative; display: block; }
-      .mobile-menu summary {
-        display: flex; align-items: center; min-height: 42px; padding: .5rem .85rem;
-        border: 1px solid rgba(216, 226, 239, .95); border-radius: 999px;
-        background: rgba(255, 255, 255, .78); color: var(--blue-dark); font-size: .84rem; font-weight: 700;
-        cursor: pointer; list-style: none; box-shadow: 0 4px 12px rgba(16, 33, 59, .06);
-      }
-      .mobile-menu summary::-webkit-details-marker { display: none; }
-      .mobile-menu summary::after { content: "＋"; margin-left: .6rem; font-family: var(--mono); font-size: .85rem; }
-      .mobile-menu[open] summary::after { content: "−"; }
-      .mobile-menu nav {
-        position: absolute; z-index: 5; top: calc(100% + .55rem); right: 0; display: grid; min-width: 232px;
-        gap: .18rem; padding: .55rem; border: 1px solid rgba(216, 226, 239, .92); border-radius: 17px;
-        background: rgba(255, 255, 255, .94); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
-        box-shadow: 0 18px 42px rgba(9, 47, 102, .18);
-      }
-      .mobile-menu nav a {
-        padding: .72rem .78rem; border-radius: 11px; color: var(--ink); font-size: .85rem;
-        font-weight: 600; text-decoration: none; transition: color .16s ease, background-color .16s ease;
-      }
-      .mobile-menu nav a:hover, .mobile-menu nav a[aria-current="location"] { background: var(--blue-pale); color: var(--blue-dark); }
-      .mobile-menu nav .nav-cta { margin-top: .25rem; color: white; }
-      .hero { padding: 4.4rem 0 4.8rem; }
-      .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
-      h1 { max-width: 10ch; font-size: clamp(3.15rem, 13vw, 5rem); }
-      .ledger-stage { max-width: 540px; width: 100%; margin-inline: auto; padding-left: .5rem; }
-      .ledger-stage::before { right: .7rem; }
-      .ledger-sheet { padding: clamp(1rem, 4.5vw, 1.6rem); }
-      .ledger-rule { left: -.4rem; width: 2rem; }
-      .section-heading { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2.4rem; }
-      .section-heading h2 { max-width: 13ch; }
-      .workflow-track { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .workflow-step { min-height: 190px; }
-      .capability-row { grid-template-columns: 1fr; gap: .55rem; padding: 1.15rem; }
-      .local-note { grid-template-columns: 1fr; gap: 1.2rem; padding: 1.4rem; }
-      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
-      .contact-action { justify-self: start; }
-      .footer-row { align-items: flex-start; flex-direction: column; gap: .45rem; }
-    }
-    @media (max-width: 390px) {
-      .wrap { width: calc(100% - 28px); }
-      .hero-actions { align-items: flex-start; flex-direction: column; gap: .9rem; }
-      .sheet-meta { font-size: .56rem; }
-      .statement { font-size: .68rem; }
-      .statement th { font-size: .51rem; }
-      .workflow-track { grid-template-columns: 1fr; }
-      .workflow-step { min-height: 0; }
-      .workflow-step .step-index { margin-bottom: .3rem; }
-      .workflow-step p { max-width: 36ch; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-    }
-  </style>
-</head>
-<body>
-  <!--
-    THESIS: DoorDues closes the loop from monthly bill to report; it refuses the generic SaaS dashboard hero.
-    OWN-WORLD: Modern society ledgers, translucent blue navigation, dimensional green workflow surfaces, the supplied logo, and the established sans/mono pairing.
-    STORY: Office-bearers see bills, payment logging, WhatsApp bill delivery via a separate sender, overdue follow-up, and reports, then email for enquiries.
-    FIRST VIEWPORT: Supplied DoorDues mark in the header; oversized message at left; illustrative maintenance statement at right.
-    FORM: Candidate 5, a monthly-close ledger spread, staged as a polished account sheet with a settling-paper entrance; seed baeef4d7.
-  -->
-  <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header">
-    <div class="wrap header-row">
-      <a class="brand" href="#top" aria-label="DoorDues home">
-        <img class="brand-logo" src="assets/doordues-logo.png" alt="" width="940" height="385">
-      </a>
-      <nav class="header-nav" aria-label="Main navigation">
-        <a href="#workflow">How it works</a>
-        <a href="#features">Features</a>
-        <a href="#contact">Contact</a>
-        <a class="nav-cta" href="mailto:shinto.chacko@icloud.com?subject=DoorDues%20demo%20request">Email for a demo</a>
-      </nav>
-      <details class="mobile-menu">
-        <summary>Menu</summary>
-        <nav aria-label="Mobile navigation">
-          <a href="#workflow">How it works</a>
-          <a href="#features">Features</a>
-          <a href="#contact">Contact</a>
-          <a class="nav-cta" href="mailto:shinto.chacko@icloud.com?subject=DoorDues%20demo%20request">Email for a demo</a>
-        </nav>
-      </details>
-    </div>
-  </header>
-
-  <main id="main">
-    <section class="hero" id="top">
-      <div class="wrap hero-grid">
-        <div class="hero-copy">
-          <h1>Society billing, from <em>bill to balance.</em></h1>
-          <p class="hero-lede">DoorDues is a lightweight billing workspace for housing-society office-bearers and managing committee members. <strong>No software installation is required: the main app file is under 1 MB and runs in your browser.</strong></p>
-          <div class="hero-actions">
-            <a class="button-primary" href="mailto:shinto.chacko@icloud.com?subject=DoorDues%20demo%20request">
-              Email us for a demo
-              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <a class="text-link" href="#workflow">See the monthly workflow <span aria-hidden="true">↓</span></a>
-          </div>
-          <p class="hero-note">Residents pay the society directly; DoorDues records payments but does not process online transactions.</p>
-        </div>
-
-        <div class="ledger-stage" aria-label="Illustrative society maintenance statement">
-          <span class="ledger-rule" aria-hidden="true"></span>
-          <article class="ledger-sheet">
-            <div class="sheet-top">
-              <div>
-                <div class="sheet-org">Society maintenance statement</div>
-                <h2 class="sheet-title">Monthly account</h2>
-              </div>
-              <span class="sheet-mark" aria-hidden="true">DD</span>
-            </div>
-            <div class="sheet-meta">
-              <span>Billing period<br><strong>Month / Year</strong></span>
-              <span style="text-align:right">Flat / shop<br><strong>Flat / Shop no.</strong></span>
-            </div>
-            <table class="statement" aria-label="Illustrative bill line items">
-              <thead><tr><th scope="col">Particulars</th><th scope="col">Amount</th></tr></thead>
-              <tbody>
-                <tr><td>Monthly maintenance</td><td class="amount">—</td></tr>
-                <tr><td>Common area charges</td><td class="amount">—</td></tr>
-                <tr><td>Other approved charges</td><td class="amount">—</td></tr>
-                <tr class="statement-total"><td>Total due</td><td class="amount">As billed</td></tr>
-              </tbody>
-            </table>
-            <div class="sheet-bottom"><span>Record payment received</span><strong>UPI · cheque · bank · cash</strong></div>
-          </article>
-          <p class="illustration-label">Illustrative layout · not a customer bill</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section workflow" id="workflow">
-      <div class="wrap">
-        <div class="section-heading">
-          <h2>One monthly close. One clear trail.</h2>
-          <p class="section-intro">Set up your society, prepare bills, record collections received, follow up on overdue amounts, and review the month.</p>
-        </div>
-        <div class="workflow-track" aria-label="DoorDues monthly workflow">
-          <article class="workflow-step">
-            <span class="step-index">SET UP</span>
-            <h3>Configure the society</h3>
-            <p>Add flats, shops, areas, owners, and the details used on bills.</p>
-            <span class="workflow-arrow" aria-hidden="true">→</span>
-          </article>
-          <article class="workflow-step">
-            <span class="step-index">BILL</span>
-            <h3>Generate statements</h3>
-            <p>Apply charges and prepare individual or batch maintenance PDFs. A batch of 100 flats takes around 3–4 minutes, depending on your PC and bill settings.</p>
-            <span class="workflow-arrow" aria-hidden="true">→</span>
-          </article>
-          <article class="workflow-step">
-            <span class="step-index">RECORD</span>
-            <h3>Log collections</h3>
-            <p>Record payments the society receives by cheque, UPI, bank transfer, or cash.</p>
-            <span class="workflow-arrow" aria-hidden="true">→</span>
-          </article>
-          <article class="workflow-step">
-            <span class="step-index">FOLLOW UP</span>
-            <h3>Review overdue dues</h3>
-            <p>Automatically prepare a defaulters list from flats with pending dues, ready for default notices to be reviewed.</p>
-            <span class="workflow-arrow" aria-hidden="true">→</span>
-          </article>
-          <article class="workflow-step">
-            <span class="step-index">REPORT</span>
-            <h3>See the picture</h3>
-            <p>Review monthly or cumulative summaries and export reports.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section capabilities" id="features">
-      <div class="wrap">
-        <div class="section-heading">
-          <h2>Made for the work behind the accounts.</h2>
-          <p class="section-intro">A practical set of tools for committees and office-bearers managing recurring charges for flats and shops.</p>
-        </div>
-        <div class="capability-list">
-          <article class="capability-row">
-            <h3><span class="capability-mark" aria-hidden="true"></span>Society configuration</h3>
-            <p>Set up floors, flats and shops, areas, owners, address, registration details, payment information, signatory, and bill QR.</p>
-          </article>
-          <article class="capability-row">
-            <h3><span class="capability-mark" aria-hidden="true"></span>Bills and records</h3>
-            <p>Generate batch or individual maintenance PDFs, customize charges, and <strong>correct bill and payment records</strong> when needed.</p>
-          </article>
-          <article class="capability-row">
-            <h3><span class="capability-mark" aria-hidden="true"></span>Payment logging</h3>
-            <p>Record cheque, UPI, bank-transfer, and cash payments. Import payment entries from CSV or Excel files.</p>
-          </article>
-          <article class="capability-row">
-            <h3><span class="capability-mark" aria-hidden="true"></span>WhatsApp bill delivery</h3>
-            <p>A separate desktop sender uses a contact CSV and bill PDF folder to help deliver bills through WhatsApp Web. It is a companion tool, not built into DoorDues.</p>
-          </article>
-          <article class="capability-row">
-            <h3><span class="capability-mark" aria-hidden="true"></span>Notices and reports</h3>
-            <p>Review flats with more than a month of pending dues, prepare notices, and export monthly or cumulative summaries.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="local-section" aria-labelledby="local-title">
-      <div class="wrap local-note">
-        <div>
-          <span class="local-key">A society office workspace</span>
-          <h2 id="local-title" style="margin-top:.7rem">Designed for the licensed PC.</h2>
-        </div>
-        <div class="local-copy">
-          <p>DoorDues runs in a browser on the licensed computer. Society records are stored in that browser’s local storage, with optional JSON backup and restore.</p>
-          <p>Bills can show UPI and cheque details so residents can pay the society directly. DoorDues records payments; it does not collect money or process online payments.</p>
-          <p class="fine-print">This site describes the current desktop workspace. It does not offer resident self-service accounts or online checkout.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="contact" id="contact">
-      <div class="wrap contact-inner">
-        <div>
-          <h2>Bring your society’s billing into focus.</h2>
-          <p>For questions about DoorDues, contact Digital Minds. We’ll help you understand whether the workspace fits your society’s process.</p>
-        </div>
-        <a class="contact-action" href="mailto:shinto.chacko@icloud.com?subject=DoorDues%20demo%20request">
-          Email us for a demo
-          <small>shinto.chacko@icloud.com</small>
-        </a>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="wrap footer-row">
-      <p><span class="footer-brand">DoorDues</span> · Developed by Digital Minds</p>
-      <p class="footer-note">Society billing workspace</p>
-    </div>
-  </footer>
 </body>
 </html>

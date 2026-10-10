@@ -1,7 +1,7 @@
-# DoorDues website
+# DoorNotice website
 
-This is a standalone, static GitHub Pages site. It is kept separate from the DoorDues app workspace because the parent folder contains society records, sample bills, and WhatsApp session data.
+This is the static public website for DoorNotice, the primary housing-society app, with DoorDues presented as an optional maintenance-billing add-on.
 
-To publish safely, create a new GitHub repository and upload only the files in this folder to the repository root. In the repository, open **Settings → Pages**, choose **Deploy from a branch**, select the default branch and `/(root)`, then save. GitHub Pages will show the published URL in the same settings panel.
+The site is designed for GitHub Pages and the intended custom domain is `www.doornotice.com`. Configure the domain's DNS with the records GitHub Pages specifies, then set the custom domain in the repository's **Settings → Pages**. The website source and its clean illustrative preview do not include the supplied proposal or raw app screenshots.
 
-Do not publish the parent workspace or its `DoorDues_data.json`, PDF bills, sender files, or `whatsapp_session` folder.
+Keep proposal PDFs, society records, resident details, sample bills, WhatsApp sender files, and `whatsapp_session` data out of this public repository.
